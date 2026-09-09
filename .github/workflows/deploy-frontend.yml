@@ -1,0 +1,49 @@
+name: Deploy CareBridge Frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Frontend/**"
+      - ".github/workflows/deploy-frontend.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/157552527011/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions@carebridge-project-2026.iam.gserviceaccount.com
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install frontend dependencies
+        working-directory: Frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: Frontend
+        run: npm run build
+
+      - name: Deploy frontend to Cloud Run
+        run: |
+          gcloud run deploy carebridge-web \
+            --source Frontend \
+            --region us-east1 \
+            --project carebridge-project-2026 \
+            --allow-unauthenticated \
+            --quiet
