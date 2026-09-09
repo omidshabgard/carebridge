@@ -1,0 +1,842 @@
+/* =========================================================
+   PATIENT PORTAL
+   ========================================================= */
+
+.app {
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 272px;
+  background: linear-gradient(180deg, #102f55, #0d2748);
+  color: #fff;
+  padding: 26px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  overflow-y: auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 10px 22px;
+  font-size: 23px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  width: 100%;
+}
+
+.logo > svg {
+  background: #078b83;
+  padding: 9px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+}
+
+.logo span {
+  color: #58d9cd;
+}
+
+.patient {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 10px;
+  border-block: 1px solid #ffffff19;
+  margin-bottom: 15px;
+}
+
+.patient > span {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #dff8f5;
+  color: #08716b;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.patient div {
+  display: grid;
+  gap: 3px;
+}
+
+.patient b {
+  font-size: 14px;
+}
+
+.patient small {
+  color: #9fb2c8;
+  font-size: 11px;
+}
+
+.sidebar nav {
+  display: grid;
+  gap: 3px;
+}
+
+.sidebar nav button {
+  border: 0;
+  background: transparent;
+  color: #b8c8d9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  position: relative;
+}
+
+.sidebar nav button > svg {
+  width: 18px;
+}
+
+.sidebar nav button > span {
+  font-size: 13px;
+}
+
+.sidebar nav button > i {
+  margin-left: auto;
+  background: #ef6965;
+  color: #fff;
+  border-radius: 20px;
+  padding: 1px 7px;
+  font-style: normal;
+  font-size: 11px;
+}
+
+.sidebar nav button.active {
+  color: #fff;
+  background: #ffffff12;
+  box-shadow: inset 3px 0 #55d9cd;
+}
+
+.sidebar nav button.active.blue {
+  box-shadow: inset 3px 0 #72a6ff;
+}
+
+.sidebar nav button.active.coral {
+  box-shadow: inset 3px 0 #ff7c73;
+}
+
+.sidebar nav button.active.violet {
+  box-shadow: inset 3px 0 #b897ff;
+}
+
+.sidebar nav button.active.amber {
+  box-shadow: inset 3px 0 #ffc95b;
+}
+
+.sidebar nav button.active.rose {
+  box-shadow: inset 3px 0 #ff8fac;
+}
+
+.sidebar nav button.active.green {
+  box-shadow: inset 3px 0 #65d899;
+}
+
+.secure {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding: 14px;
+  border: 1px solid #ffffff18;
+  border-radius: 12px;
+  color: #58d9cd;
+}
+
+.secure div {
+  display: grid;
+  gap: 3px;
+}
+
+.secure b {
+  font-size: 11px;
+  color: #dbe7f3;
+}
+
+.secure small {
+  font-size: 10px;
+  color: #8fa5bc;
+}
+
+.close,
+.hamburger {
+  display: none;
+}
+
+main {
+  margin-left: 272px;
+}
+
+header {
+  height: 72px;
+  background: #fff;
+  border-bottom: 1px solid #e2e9ef;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: min(400px, 50vw);
+  color: #8b9aac;
+}
+
+header label svg {
+  width: 18px;
+}
+
+header input {
+  border: 0;
+  outline: 0;
+  width: 100%;
+  font-size: 13px;
+}
+
+.bell {
+  margin-left: auto;
+  position: relative;
+  border: 0;
+  background: transparent;
+  color: #526278;
+}
+
+.bell i {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #ee6865;
+  border-radius: 50%;
+  right: 5px;
+  top: 3px;
+}
+
+.help {
+  border: 1px solid #dfe7ed;
+  background: #fff;
+  border-radius: 9px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #526278;
+  font-size: 12px;
+}
+
+.help svg {
+  width: 17px;
+}
+
+.page {
+  max-width: 1400px;
+  margin: auto;
+  padding: 28px 34px 48px;
+}
+
+.toast {
+  position: fixed;
+  right: 25px;
+  top: 90px;
+  z-index: 30;
+  background: #e8f8f5;
+  color: #08736d;
+  border: 1px solid #b9e1dc;
+  border-radius: 10px;
+  padding: 12px 15px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  box-shadow: 0 10px 25px #17304d18;
+}
+
+.toast svg {
+  width: 17px;
+}
+
+.hero {
+  min-height: 250px;
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(
+      90deg,
+      #0d3159 0%,
+      #164b70e8 38%,
+      #164b7055 67%,
+      transparent 100%
+    ),
+    url("../assets/carebridge-hero.png") 65% center / cover;
+  box-shadow: 0 14px 30px #102b4e22;
+}
+
+.hero > div {
+  max-width: 500px;
+  color: #fff;
+}
+
+.hero span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #79ded5;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.hero span svg {
+  width: 16px;
+}
+
+.hero h1 {
+  font: 500 38px/1.1 Georgia, serif;
+  margin: 12px 0 9px;
+}
+
+.hero p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d9e8f2;
+}
+
+.hero button,
+.welcome > button,
+.action {
+  border: 0;
+  background: #0ea096;
+  color: #fff;
+  border-radius: 9px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.hero button svg,
+.welcome button svg {
+  width: 17px;
+}
+
+.care-types {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 15px 0 26px;
+}
+
+.care-types button {
+  border: 1px solid #e1e8ee;
+  background: #fff;
+  border-radius: 13px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  color: #3f5064;
+}
+
+.care-types button > span {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.care-types .urgent {
+  background: #fff0ef;
+  color: #d75c57;
+}
+
+.care-types .primary {
+  background: #e7f7f5;
+  color: #087a74;
+}
+
+.care-types .specialty {
+  background: #edf2fd;
+  color: #3157a4;
+}
+
+.care-types b {
+  display: grid;
+  gap: 2px;
+  font-size: 13px;
+  flex: 1;
+}
+
+.care-types small {
+  font-weight: 500;
+  color: #8b98a8;
+  font-size: 10px;
+}
+
+.care-types svg {
+  width: 18px;
+}
+
+.welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.welcome small,
+.card-head small,
+.section-head small {
+  font-size: 10px;
+  color: #8795a5;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.welcome h2 {
+  font: 500 29px Georgia, serif;
+  margin: 6px 0;
+}
+
+.welcome p {
+  margin: 0;
+  color: #68778a;
+  font-size: 13px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.metric,
+.card,
+.section {
+  background: #fff;
+  border: 1px solid #e1e8ee;
+  border-radius: 14px;
+  box-shadow: 0 4px 15px #17304d08;
+}
+
+.metric {
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.metric > span {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+}
+
+.metric .red {
+  background: #fff0ef;
+  color: #d75c57;
+}
+
+.metric .teal {
+  background: #e7f7f5;
+  color: #087a74;
+}
+
+.metric .blue {
+  background: #edf2fd;
+  color: #3157a4;
+}
+
+.metric > div {
+  display: grid;
+}
+
+.metric small {
+  font-size: 9px;
+  color: #8290a1;
+  font-weight: 800;
+}
+
+.metric strong {
+  font-size: 22px;
+}
+
+.metric em {
+  font-size: 10px;
+  color: #8794a4;
+  font-style: normal;
+  margin-left: 4px;
+}
+
+.metric p {
+  margin: 1px 0 0;
+  color: #168173;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.metric p svg {
+  width: 12px;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 16px;
+}
+
+.card {
+  padding: 19px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+
+.card-head h3 {
+  font: 600 18px Georgia, serif;
+  margin: 4px 0;
+}
+
+.card-head button {
+  border: 0;
+  background: transparent;
+  color: #087a74;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+}
+
+.card-head svg {
+  width: 15px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid #edf1f4;
+  padding: 12px 0;
+}
+
+.row > span {
+  flex: none;
+}
+
+.date {
+  width: 47px;
+  height: 51px;
+  background: #087a74;
+  color: white;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.date small {
+  font-size: 8px;
+  margin-top: -12px;
+}
+
+.row > div {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+}
+
+.row b {
+  font-size: 12px;
+}
+
+.row p,
+.row small {
+  margin: 0;
+  color: #7b8999;
+  font-size: 10px;
+}
+
+.row > i {
+  font-style: normal;
+  background: #eef5f5;
+  border-radius: 20px;
+  padding: 4px 7px;
+  color: #48706d;
+  font-size: 9px;
+}
+
+.med {
+  width: 37px;
+  height: 37px;
+  border-radius: 9px;
+  background: #e9f7f5;
+  color: #087a74;
+  display: grid;
+  place-items: center;
+}
+
+.med.amber {
+  background: #fff5dd;
+  color: #a66d11;
+}
+
+.med svg {
+  width: 17px;
+}
+
+.outline {
+  border: 1px solid #b8dcd8;
+  background: white;
+  color: #087a74;
+  border-radius: 7px;
+  padding: 6px 8px;
+  font-size: 9px;
+}
+
+.section {
+  padding: 27px;
+  min-height: 75vh;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  border-bottom: 1px solid #e4eaf0;
+  padding-bottom: 22px;
+}
+
+.section-head h1 {
+  font: 500 34px Georgia, serif;
+  margin: 6px 0;
+}
+
+.section-head p {
+  margin: 0;
+  color: #69788a;
+  font-size: 13px;
+}
+
+.section-head > button {
+  border: 1px solid #dfe7ed;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-size: 11px;
+  color: #46576a;
+}
+
+.item-list {
+  display: grid;
+  gap: 11px;
+  max-width: 850px;
+  margin: 23px 0;
+}
+
+.item-list article {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid #e2e9ee;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.item-list article > span {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #edf7f6;
+  color: #087a74;
+  display: grid;
+  place-items: center;
+}
+
+.item-list article > span svg {
+  width: 18px;
+}
+
+.item-list article > div {
+  flex: 1;
+}
+
+.item-list h2 {
+  font-size: 13px;
+  margin: 0 0 4px;
+}
+
+.item-list p {
+  font-size: 11px;
+  color: #69788a;
+  margin: 0 0 5px;
+}
+
+.item-list small {
+  font-size: 10px;
+  color: #8b98a8;
+}
+
+.item-list i {
+  font-style: normal;
+  background: #fff3df;
+  color: #9b6617;
+  border-radius: 20px;
+  padding: 5px 8px;
+  font-size: 9px;
+}
+
+.item-list article > button {
+  border: 0;
+  background: transparent;
+  color: #8b98a8;
+}
+
+.empty {
+  color: #718094;
+  padding: 30px;
+}
+
+.action {
+  margin-top: 10px;
+}
+
+.section .action {
+  display: inline-flex;
+}
+
+/* =========================================================
+   PORTAL RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 980px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page {
+    padding: 24px;
+  }
+
+  .sidebar {
+    width: 245px;
+  }
+
+  main {
+    margin-left: 245px;
+  }
+}
+
+@media (max-width: 760px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: 0.2s;
+    width: 272px;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 15px 0 40px #0a1e3570;
+  }
+
+  .close {
+    display: block;
+    position: absolute;
+    right: 12px;
+    top: 10px;
+    background: transparent;
+    border: 0;
+    color: #bcd;
+  }
+
+  main {
+    margin-left: 0;
+  }
+
+  .hamburger {
+    display: block;
+    border: 0;
+    background: transparent;
+    color: #143354;
+    margin-right: 10px;
+  }
+
+  .help {
+    font-size: 0;
+  }
+
+  .page {
+    padding: 18px 14px;
+  }
+
+  .hero {
+    min-height: 350px;
+    padding: 22px;
+    align-items: flex-end;
+    background:
+      linear-gradient(
+        0deg,
+        #0d3159ee,
+        #164b7060 65%,
+        transparent
+      ),
+      url("../assets/carebridge-hero.png") 67% center / cover;
+  }
+
+  .hero h1 {
+    font-size: 31px;
+  }
+
+  .care-types,
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .item-list article {
+    align-items: flex-start;
+  }
+
+  .item-list i {
+    display: none;
+  }
+}

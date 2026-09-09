@@ -1,0 +1,599 @@
+/* =========================
+   FIND CARE
+========================= */
+
+.find-care-section {
+  display: flex;
+flex-direction: column;
+justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  padding: 52px 7% 48px;
+
+  background:
+    radial-gradient(
+      circle at 12% 20%,
+      rgba(124, 217, 255, 0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 88% 75%,
+      rgba(255, 198, 214, 0.18),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #f7fbff 0%,
+      #f4fbff 45%,
+      #fbf8ff 100%
+    );
+}
+
+.find-care-section::before {
+  content: "";
+  position: absolute;
+
+  width: 360px;
+  height: 360px;
+
+  top: -160px;
+  right: -120px;
+
+  border-radius: 50%;
+
+  background: rgba(123, 199, 255, 0.14);
+  filter: blur(18px);
+
+  pointer-events: none;
+}
+
+.find-care-section::after {
+  content: "";
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  left: -180px;
+  bottom: -220px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 182, 199, 0.15);
+  filter: blur(22px);
+
+  pointer-events: none;
+}
+
+/* =========================
+   HEADING
+========================= */
+
+.find-care-heading {
+  position: relative;
+  z-index: 2;
+
+  max-width: 1100px;
+  margin: 0 auto 32px;
+
+  text-align: center;
+}
+
+.find-care-heading small {
+  display: inline-flex;
+
+  margin-bottom: 10px;
+
+  color: #168d82;
+
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+}
+
+.find-care-heading h2 {
+  margin: 0;
+
+  color: #133955;
+
+  font: 600 clamp(32px, 3.2vw, 46px) / 1.08 Georgia, serif;
+
+  letter-spacing: -0.02em;
+}
+
+.find-care-heading p {
+  max-width: 690px;
+
+  margin: 13px auto 0;
+
+  color: #667d90;
+
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.find-care-search-shell {
+  position: relative;
+  z-index: 2;
+
+  max-width: 940px;
+  margin: 0 auto 36px;
+}
+
+.find-care-search-box {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 7px 8px 7px 17px;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.95);
+
+  border: 1px solid rgba(78, 145, 199, 0.18);
+
+  box-shadow:
+    0 12px 30px rgba(42, 87, 120, 0.09),
+    0 22px 50px rgba(42, 87, 120, 0.06);
+}
+
+.find-care-search-box > svg {
+  width: 21px;
+  height: 21px;
+
+  color: #438fc6;
+}
+
+.find-care-search-box input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #173b56;
+
+  font: inherit;
+  font-size: 14px;
+}
+
+.find-care-search-box input::placeholder {
+  color: #91a2b0;
+}
+
+.find-care-search-box button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 45px;
+
+  padding: 0 22px;
+
+  border: 0;
+  border-radius: 13px;
+
+  background: linear-gradient(
+    135deg,
+    #438fc6,
+    #2879b3
+  );
+
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 9px 20px rgba(41, 121, 179, 0.22);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.find-care-search-box button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.find-care-search-box button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 13px 25px rgba(41, 121, 179, 0.3);
+}
+
+/* =========================
+   SIX CARE OPTIONS
+========================= */
+
+.find-care-grid {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+
+  gap: 26px;
+
+  align-items: start;
+}
+
+/* =========================
+   CARE BUTTON
+========================= */
+
+.find-care-card {
+  position: relative;
+
+  min-width: 0;
+
+  border: 0;
+  padding: 0;
+
+  background: transparent;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  color: #173b56;
+
+  cursor: pointer;
+
+  font: inherit;
+}
+
+/* =========================
+   CIRCLES
+========================= */
+
+.find-care-icon {
+  position: relative;
+
+  width: 102px;
+  height: 102px;
+
+  margin-bottom: 15px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.8),
+    0 12px 22px rgba(34, 78, 105, 0.1),
+    0 22px 40px rgba(34, 78, 105, 0.08);
+
+  transition:
+    transform 0.32s ease,
+    box-shadow 0.32s ease;
+}
+
+/* soft glass highlight */
+
+.find-care-icon::before {
+  content: "";
+
+  position: absolute;
+
+  width: 65%;
+  height: 34%;
+
+  top: 8px;
+  left: 18%;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.62),
+    rgba(255, 255, 255, 0)
+  );
+
+  pointer-events: none;
+}
+
+.find-care-icon svg {
+  position: relative;
+  z-index: 2;
+
+  width: 39px;
+  height: 39px;
+
+  stroke-width: 2.1;
+}
+
+/* =========================
+   CIRCLE COLORS
+========================= */
+
+.find-care-primary .find-care-icon {
+  background: linear-gradient(
+    145deg,
+    #dffff6,
+    #9be9d8
+  );
+
+  color: #118d79;
+}
+
+.find-care-urgent .find-care-icon {
+  background: linear-gradient(
+    145deg,
+    #ffe4e1,
+    #ffaaa4
+  );
+
+  color: #e33f35;
+}
+
+.find-care-specialty .find-care-icon {
+  background: linear-gradient(
+    145deg,
+    #e5f2ff,
+    #a9d2ff
+  );
+
+  color: #287bd2;
+}
+
+.find-care-hospital .find-care-icon {
+  background: linear-gradient(
+    145deg,
+    #fff3ce,
+    #ffd67b
+  );
+
+  color: #b57510;
+}
+
+.find-care-mental .find-care-icon {
+  background: linear-gradient(
+    145deg,
+    #f2e4ff,
+    #d1adff
+  );
+
+  color: #8046d8;
+}
+
+.find-care-pharmacy .find-care-icon {
+  background: linear-gradient(
+    145deg,
+    #dffff8,
+    #9ce9d8
+  );
+
+  color: #178e82;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.find-care-card > div {
+  width: 100%;
+}
+
+.find-care-card h3 {
+  margin: 0 0 6px;
+
+  color: #173b56;
+
+  font-size: 15px;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.find-care-card p {
+  margin: 0 auto;
+
+  color: #657d8e;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* =========================
+   JUMP / HOVER EFFECT
+========================= */
+
+.find-care-card:hover .find-care-icon {
+  transform:
+    translateY(-10px)
+    scale(1.07);
+
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    0 16px 25px rgba(34, 78, 105, 0.12),
+    0 30px 48px rgba(34, 78, 105, 0.14);
+}
+
+.find-care-card:hover h3 {
+  color: #0b8e85;
+}
+
+/* individual hover glow */
+
+.find-care-primary:hover .find-care-icon {
+  box-shadow:
+    0 17px 32px rgba(50, 190, 157, 0.25),
+    0 30px 50px rgba(50, 190, 157, 0.13);
+}
+
+.find-care-urgent:hover .find-care-icon {
+  box-shadow:
+    0 17px 32px rgba(239, 92, 83, 0.23),
+    0 30px 50px rgba(239, 92, 83, 0.12);
+}
+
+.find-care-specialty:hover .find-care-icon {
+  box-shadow:
+    0 17px 32px rgba(56, 133, 220, 0.23),
+    0 30px 50px rgba(56, 133, 220, 0.12);
+}
+
+.find-care-hospital:hover .find-care-icon {
+  box-shadow:
+    0 17px 32px rgba(213, 157, 46, 0.24),
+    0 30px 50px rgba(213, 157, 46, 0.12);
+}
+
+.find-care-mental:hover .find-care-icon {
+  box-shadow:
+    0 17px 32px rgba(135, 81, 218, 0.23),
+    0 30px 50px rgba(135, 81, 218, 0.12);
+}
+
+.find-care-pharmacy:hover .find-care-icon {
+  box-shadow:
+    0 17px 32px rgba(38, 176, 157, 0.23),
+    0 30px 50px rgba(38, 176, 157, 0.12);
+}
+
+/* =========================
+   SMALL FLOATING MOVEMENT
+========================= */
+
+.find-care-card:nth-child(1) .find-care-icon,
+.find-care-card:nth-child(3) .find-care-icon,
+.find-care-card:nth-child(5) .find-care-icon {
+  animation: careFloatOne 4.2s ease-in-out infinite;
+}
+
+.find-care-card:nth-child(2) .find-care-icon,
+.find-care-card:nth-child(4) .find-care-icon,
+.find-care-card:nth-child(6) .find-care-icon {
+  animation: careFloatTwo 4.6s ease-in-out infinite;
+}
+
+@keyframes careFloatOne {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -4px;
+  }
+}
+
+@keyframes careFloatTwo {
+  0%,
+  100% {
+    translate: 0 -2px;
+  }
+
+  50% {
+    translate: 0 3px;
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .find-care-grid {
+    max-width: 760px;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    row-gap: 38px;
+  }
+}
+
+@media (max-width: 720px) {
+  .find-care-section {
+    padding: 65px 22px 70px;
+  }
+
+  .find-care-heading {
+    text-align: center;
+  }
+
+  .find-care-heading h2 {
+    font-size: 32px;
+  }
+
+  .find-care-heading p {
+    font-size: 14px;
+  }
+
+  .find-care-search-box {
+    grid-template-columns: auto 1fr;
+  }
+
+  .find-care-search-box button {
+    grid-column: 1 / -1;
+
+    width: 100%;
+  }
+
+  .find-care-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 32px 20px;
+  }
+
+  .find-care-icon {
+    width: 88px;
+    height: 88px;
+  }
+
+  .find-care-icon svg {
+    width: 33px;
+    height: 33px;
+  }
+}
+
+@media (max-width: 430px) {
+  .find-care-section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .find-care-grid {
+    gap: 28px 12px;
+  }
+
+  .find-care-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .find-care-card h3 {
+    font-size: 14px;
+  }
+
+  .find-care-card p {
+    font-size: 11px;
+  }
+}

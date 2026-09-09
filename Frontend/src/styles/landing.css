@@ -1,0 +1,613 @@
+/* =========================================================
+   PUBLIC HOMEPAGE
+   ========================================================= */
+
+.landing {
+  min-height: 100vh;
+  background: #fff;
+  color: #12304b;
+}
+
+.public-header {
+  height: 86px;
+  max-width: 1440px;
+  margin: auto;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  border-bottom: 1px solid #e7edf0;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  overflow: visible;
+}
+
+.public-logo,
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  color: #12304b;
+  font-size: 24px;
+}
+
+.public-logo svg,
+.footer-logo svg {
+  width: 42px;
+  height: 42px;
+  padding: 9px;
+  background: #07958c;
+  color: #fff;
+  border-radius: 13px;
+}
+
+.public-logo span,
+.footer-logo span {
+  color: #0ca79b;
+}
+
+.public-header nav {
+  display: flex;
+  gap: 28px;
+  margin: auto;
+}
+
+.public-header nav a {
+  color: #40566a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.public-header > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-right: 96px;
+}
+
+.public-header .call {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #496174;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.public-header .call svg {
+  width: 15px;
+}
+
+.public-header > div button,
+.landing footer button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0d3856;
+  color: #fff;
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 16px;
+  font-weight: 750;
+}
+
+.public-header button svg,
+.landing footer button svg {
+  width: 16px;
+}
+
+.landing-main {
+  margin: 0;
+}
+
+/* =========================================================
+   PUBLIC HERO
+   ========================================================= */
+
+.landing-hero {
+  min-height: 590px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  padding: 70px max(6vw, 40px);
+  background-image:
+    linear-gradient(
+      90deg,
+      #e6f2ff 0%,
+      #dbeafeef 43%,
+      #dbeafe8c 61%,
+      transparent 82%
+    ),
+    url("../assets/carebridge-hero.png");
+  background-position: center, right center;
+  background-size: cover, auto 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.landing-hero > div {
+  max-width: 660px;
+  z-index: 2;
+}
+
+.eyebrow {
+  color: #078a82;
+  font-weight: 850;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.eyebrow svg {
+  width: 17px;
+}
+
+.landing-hero h1 {
+  font: 600 clamp(46px, 5.2vw, 76px) / 1.02 Georgia, serif;
+  letter-spacing: -0.035em;
+  margin: 19px 0;
+  color: #102e4b;
+}
+
+.landing-hero h1 em {
+  font-style: normal;
+  color: #0a938a;
+}
+
+.landing-hero > div > p {
+  font-size: 18px;
+  line-height: 1.65;
+  color: #405d73;
+  max-width: 610px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin: 28px 0 38px;
+}
+
+.hero-actions button,
+.hero-actions a {
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.hero-actions button {
+  border: 0;
+  background: #079b91;
+  color: #fff;
+}
+
+.hero-actions a {
+  border: 1px solid #93afc3;
+  background: #ffffffcc;
+  color: #153b58;
+}
+
+.hero-actions svg {
+  width: 18px;
+}
+
+.trust {
+  display: flex;
+  gap: 34px;
+}
+
+.trust span {
+  font-size: 12px;
+  color: #516b7d;
+  display: grid;
+}
+
+.trust b {
+  color: #102f4d;
+  font-size: 21px;
+}
+
+.landing-hero > aside {
+  align-self: end;
+  justify-self: end;
+  z-index: 3;
+}
+
+.landing-hero > aside > div {
+  width: 330px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px #102f4d2c;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.landing-hero > aside svg {
+  color: #ef6b63;
+}
+
+.landing-hero > aside span {
+  display: grid;
+  gap: 3px;
+}
+
+.landing-hero > aside small {
+  font-size: 10px;
+  color: #718496;
+}
+
+.landing-hero > aside button {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: #0b817b;
+  font-size: 0;
+}
+/* =========================================================
+   HERO HANDWRITTEN MESSAGE
+   ========================================================= */
+
+.hero-handwritten {
+  position: absolute;
+  z-index: 4;
+
+  left: 56%;
+  top: 36%;
+
+  width: max-content;
+  max-width: none !important;
+
+  color: #2f6597;
+
+  font-family:
+    "Bradley Hand",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
+
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.05;
+
+  text-align: center;
+
+  transform: rotate(-6deg);
+
+  pointer-events: none;
+}
+
+.hero-handwritten > span:first-child {
+  display: block;
+}
+
+.hero-handwritten-arrow {
+  display: block;
+
+  margin-top: 3px;
+  margin-left: 55px;
+
+  font-size: 30px;
+  font-weight: 400;
+
+  transform: rotate(12deg);
+}
+
+@media (max-width: 1000px) {
+  .hero-handwritten {
+    left: 55%;
+    top: 31%;
+
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-handwritten {
+    display: none;
+  }
+}
+
+/* =========================================================
+   SERVICE STRIP
+   ========================================================= */
+
+.service-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 1250px;
+  margin: -23px auto 0;
+  position: relative;
+  z-index: 4;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 14px 40px #1939551c;
+  padding: 8px;
+}
+
+.service-strip button {
+  padding: 20px 18px;
+  border: 0;
+  border-right: 1px solid #e5ecef;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  color: #0b8a82;
+}
+
+.service-strip button:last-child {
+  border-right: 0;
+}
+
+.service-strip button > svg:first-child {
+  width: 30px;
+}
+
+.service-strip button span {
+  display: grid;
+  gap: 3px;
+  flex: 1;
+}
+
+.service-strip b {
+  color: #183a55;
+}
+
+.service-strip small {
+  color: #81909d;
+}
+
+.service-strip button > svg:last-child {
+  width: 16px;
+  color: #8495a3;
+}
+
+/* =========================================================
+   LEGACY CONNECTED SECTION
+   ========================================================= */
+
+.care-intro {
+  padding: 110px 6vw 120px;
+  text-align: center;
+  max-width: 1300px;
+  margin: auto;
+}
+
+.care-intro > .eyebrow {
+  justify-content: center;
+}
+
+.care-intro h2 {
+  font: 600 44px/1.12 Georgia, serif;
+  margin: 16px;
+}
+
+.care-intro > p {
+  max-width: 740px;
+  margin: 0 auto 45px;
+  color: #647789;
+  line-height: 1.7;
+}
+
+.care-intro > div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  text-align: left;
+}
+
+.care-intro article {
+  padding: 28px;
+  border: 1px solid #dfe9ed;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fff, #f3faf9);
+}
+
+.care-intro article > span {
+  color: #0b978e;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.care-intro h3 {
+  font: 600 23px Georgia, serif;
+  margin: 14px 0 8px;
+}
+
+.care-intro article p {
+  color: #6a7d8d;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/*
+  HomeExtras replaces the old connected section
+  and original footer on the public homepage.
+*/
+
+.landing .care-intro {
+  display: none;
+}
+
+body:has(.home-extras) .landing {
+  min-height: 0;
+}
+
+body:has(.home-extras) .landing footer {
+  display: none;
+}
+
+/* =========================================================
+   PUBLIC HOMEPAGE RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .public-header > div > button {
+    display: none;
+  }
+
+  .public-header > div {
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1000px) {
+  .landing-hero {
+    background-image:
+      linear-gradient(90deg, #e6f2fff4, #dbeafec7),
+      url("../assets/carebridge-hero.png");
+    background-position: center, 70% center;
+    background-size: cover, cover;
+  }
+}
+
+@media (max-width: 900px) {
+  .public-header nav,
+  .public-header .call {
+    display: none;
+  }
+
+  .public-header > div {
+    margin-left: auto;
+  }
+
+  .landing-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-hero > aside {
+    justify-self: start;
+    margin-top: 35px;
+  }
+
+  .service-strip {
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+  }
+
+  .service-strip button:nth-child(2) {
+    border-right: 0;
+  }
+
+  .care-intro > div {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .public-header > div {
+    padding-right: 0;
+  }
+
+  .landing-hero {
+    background-image:
+      linear-gradient(90deg, #e6f2ffde, #dbeafea8),
+      url("../assets/carebridge-hero.png");
+    background-position: center, 67% center;
+    background-size: cover, cover;
+  }
+}
+
+@media (max-width: 600px) {
+  .public-header {
+    height: 72px;
+    padding: 0 100px 0 18px;
+  }
+
+  .public-logo {
+    font-size: 20px;
+    white-space: nowrap;
+  }
+
+  .public-logo svg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .public-header > div button {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .landing-hero {
+    padding: 55px 20px;
+    min-height: 620px;
+  }
+
+  .landing-hero h1 {
+    font-size: 45px;
+  }
+
+  .landing-hero > div > p {
+    font-size: 15px;
+  }
+
+  .trust {
+    gap: 15px;
+  }
+
+  .trust b {
+    font-size: 18px;
+  }
+
+  .landing-hero > aside > div {
+    width: min(330px, 90vw);
+  }
+
+  .service-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .service-strip button {
+    border-right: 0;
+    border-bottom: 1px solid #e5ecef;
+  }
+
+  .care-intro {
+    padding: 75px 20px;
+  }
+
+  .care-intro h2 {
+    font-size: 34px;
+  }
+
+  .footer-logo {
+    font-size: 19px;
+  }
+}
+
+/* FIND CARE + ABOUT SIDE-BY-SIDE */
+
+.care-about-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  width: 100%;
+}
+
+.care-about-layout .find-care-section,
+.care-about-layout .about-section {
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+@media (max-width: 1100px) {
+  .care-about-layout {
+    grid-template-columns: 1fr;
+  }
+}

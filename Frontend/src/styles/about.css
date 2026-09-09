@@ -1,0 +1,315 @@
+/* =========================
+   ABOUT CAREBRIDGE
+========================= */
+
+.about-section {
+  position: relative;
+  overflow: hidden;
+  padding: 58px 7% 68px;
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(117, 223, 207, 0.16),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(255, 190, 176, 0.16),
+      transparent 30%
+    ),
+    linear-gradient(
+      135deg,
+      #f2fbff 0%,
+      #fbfdff 50%,
+      #f4fff9 100%
+    );
+}
+
+.about-section::before {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  top: -160px;
+  left: -120px;
+  border-radius: 50%;
+  background: rgba(78, 205, 196, 0.14);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.about-section::after {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  right: -160px;
+  bottom: -210px;
+  border-radius: 50%;
+  background: rgba(255, 176, 157, 0.14);
+  filter: blur(22px);
+  pointer-events: none;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.about-heading {
+  position: relative;
+  z-index: 2;
+  max-width: 1050px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.about-heading small {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 17px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(8, 158, 147, 0.16);
+  box-shadow: 0 8px 22px rgba(30, 91, 109, 0.08);
+  color: #078f87;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+
+.about-heading h2 {
+  margin: 0;
+  color: #123653;
+  font-size: clamp(34px, 3.5vw, 52px);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.about-heading p {
+  max-width: 760px;
+  margin: 18px auto 0;
+  color: #60798c;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.about-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(330px, 0.75fr);
+  gap: 48px;
+  align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.about-image {
+  position: relative;
+  overflow: hidden;
+  min-height: 390px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  background: #ffffff;
+  box-shadow:
+    0 18px 35px rgba(27, 71, 94, 0.1),
+    0 38px 70px rgba(27, 71, 94, 0.1);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.about-image:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 22px 42px rgba(27, 71, 94, 0.13),
+    0 46px 85px rgba(27, 71, 94, 0.13);
+}
+
+.about-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 390px;
+  object-fit: cover;
+}
+
+
+/* Image already contains the message,
+   so we don't need to repeat it on top. */
+
+.about-image-message {
+  display: none;
+}
+
+
+/* =========================
+   VALUES
+========================= */
+
+.about-values {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.about-values article {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 20px 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(31, 73, 98, 0.07);
+  backdrop-filter: blur(10px);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.about-values article:hover {
+  transform: translateX(8px);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 38px rgba(31, 73, 98, 0.11);
+}
+
+
+/* =========================
+   VALUE ICONS
+========================= */
+
+.about-value-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 8px 18px rgba(25, 74, 95, 0.09);
+}
+
+.about-value-icon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.about-value-green {
+  color: #078f84;
+  background: linear-gradient(145deg, #e4faf4, #c9f2e8);
+}
+
+.about-value-blue {
+  color: #4b73c9;
+  background: linear-gradient(145deg, #edf3ff, #dce8ff);
+}
+
+.about-value-coral {
+  color: #d96761;
+  background: linear-gradient(145deg, #fff0ee, #ffdedb);
+}
+
+
+/* =========================
+   VALUE TEXT
+========================= */
+
+.about-values h3 {
+  margin: 2px 0 7px;
+  color: #173b56;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.about-values p {
+  margin: 0;
+  color: #647c8d;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+  .about-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .about-image {
+    min-height: 340px;
+  }
+
+  .about-image img {
+    min-height: 340px;
+  }
+
+  .about-values {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-values article {
+    flex-direction: column;
+  }
+
+  .about-values article:hover {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 700px) {
+  .about-section {
+    padding: 45px 22px 50px;
+  }
+
+  .about-heading {
+    margin-bottom: 30px;
+    text-align: left;
+  }
+
+  .about-heading p {
+    margin-left: 0;
+  }
+
+  .about-content {
+    gap: 24px;
+  }
+
+  .about-image {
+    min-height: 230px;
+    border-radius: 24px;
+  }
+
+  .about-image img {
+    min-height: 230px;
+  }
+
+  .about-values {
+    grid-template-columns: 1fr;
+  }
+
+  .about-values article {
+    flex-direction: row;
+  }
+}
