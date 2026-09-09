@@ -1,0 +1,53 @@
+name: Deploy CareBridge Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/157552527011/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions@carebridge-project-2026.iam.gserviceaccount.com
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Test backend
+        working-directory: backend
+        run: npm test
+
+      - name: Build backend
+        working-directory: backend
+        run: npm run build
+
+      - name: Deploy backend to Cloud Run
+        run: |
+          gcloud run deploy carebridge-api \
+            --source backend \
+            --region us-east1 \
+            --project carebridge-project-2026 \
+            --allow-unauthenticated \
+            --quiet
