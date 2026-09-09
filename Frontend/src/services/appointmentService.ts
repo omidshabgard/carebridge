@@ -16,7 +16,9 @@ export type CreateAppointmentInput = {
   reason: string;
 };
 
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ??
+  "https://carebridge-api-157552527011.us-east1.run.app/api";
 
 function getToken() {
   return localStorage.getItem("carebridge_token");
