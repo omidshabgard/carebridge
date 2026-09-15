@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import authRoutes from "./routes/auth.js";
 import resourceRoutes from "./routes/resources.js";
 import appointmentRoutes from "./routes/appointments/index.js";
+import medicationRoutes from "./routes/medications/index.js";
 
 import {
   errorHandler,
@@ -53,6 +54,9 @@ app.get("/api/health", (_req, res) => {
 
 // Appointment routes
 app.use("/api/appointments", appointmentRoutes);
+
+// Medication routes
+app.use("/api/medications", medicationRoutes);
 
 // Other patient resources
 app.use("/api", resourceRoutes);

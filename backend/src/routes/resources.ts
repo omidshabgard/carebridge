@@ -7,7 +7,6 @@ import {
   type AuthRequest,
 } from "../middleware/auth.js";
 
-import { Medication } from "../models/Medication.js";
 import { Message } from "../models/Message.js";
 import { HealthRecord } from "../models/HealthRecord.js";
 
@@ -16,7 +15,6 @@ const router = Router();
 router.use(requireAuth);
 
 const models: Record<string, Model<any>> = {
-  medications: Medication,
   messages: Message,
   records: HealthRecord,
 };
@@ -37,38 +35,6 @@ for (const [path, Model] of Object.entries(models)) {
     }
   });
 }
-
-// MARK medication as taken
-router.patch(
-  "/medications/:id/taken",
-  async (req: AuthRequest, res, next) => {
-    try {
-      const medication = await Medication.findOneAndUpdate(
-        {
-          _id: req.params.id,
-          patient: req.user!.id,
-          active: true,
-        },
-        {
-          lastTakenAt: new Date(),
-        },
-        {
-          new: true,
-        }
-      );
-
-      if (!medication) {
-        return res.status(404).json({
-          message: "Medication not found",
-        });
-      }
-
-      res.json(medication);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 // SEND message
 router.post(

@@ -37,6 +37,7 @@ import AboutSection from "./AboutSection";
 import FindCareSection from "./FindCareSection";
 import AppointmentForm from "./components/appointments/AppointmentForm";
 import AppointmentDetails from "./components/appointments/AppointmentDetails";
+import Medications from "./components/medications/Medications";
 
 const nav: {
   name: Section;
@@ -961,8 +962,10 @@ function Portal({ goHome }: { goHome: () => void }) {
                   Back to overview
                 </button>
               </div>
-              {active === "Appointments" && selectedAppointment ? (
-                <AppointmentDetails
+              {active === "Medications" ? (
+	<Medications show={show} />
+) : active === "Appointments" && selectedAppointment ? (
+	<AppointmentDetails
                   appointment={selectedAppointment}
                   onBack={() => setSelectedAppointment(null)}
                   onCancelled={(updatedAppointment) => {
