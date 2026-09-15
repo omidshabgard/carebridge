@@ -1,0 +1,874 @@
+/* =========================================
+   CAREBRIDGE — MEDICATIONS
+   ========================================= */
+
+
+/* =========================================
+   ADD / EDIT MEDICATION
+   ========================================= */
+
+.medication-form {
+  padding: 32px;
+}
+
+.medication-form-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #e4edf5;
+}
+
+.medication-form-icon,
+.medication-main-icon {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+  color: #1677c8;
+  background: #eaf5ff;
+  border: 1px solid #d4e9fb;
+}
+
+.medication-form-header h3 {
+  margin: 0 0 5px;
+  color: #15233d;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.medication-form-header p {
+  margin: 0;
+  color: #718096;
+  font-size: 14px;
+}
+
+
+/* =========================================
+   FORM GRID
+   ========================================= */
+
+.medication-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 24px;
+}
+
+.medication-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+
+  color: #26364f;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   NORMAL INPUT
+   ========================================= */
+
+.medication-input-wrap {
+  width: 100%;
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 0 15px;
+
+  border: 1px solid #d6e3ee;
+  border-radius: 12px;
+
+  background: #f8fbfe;
+  color: #6294bd;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.medication-input-wrap:focus-within {
+  background: #ffffff;
+  border-color: #75b9e8;
+  box-shadow: 0 0 0 4px rgba(64, 153, 216, 0.1);
+}
+
+.medication-input-wrap svg {
+  flex-shrink: 0;
+  color: #5599cd;
+}
+
+.medication-input-wrap input {
+  width: 100%;
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  padding: 14px 0;
+
+  background: transparent;
+  color: #17243c;
+
+  font: inherit;
+  font-weight: 500;
+}
+
+.medication-input-wrap input::placeholder {
+  color: #9aaabd;
+}
+
+
+/* =========================================
+   DOSE / STRENGTH
+   ========================================= */
+
+.medication-dose-control {
+  width: 100%;
+  min-height: 52px;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+
+  border: 1px solid #d6e3ee;
+  border-radius: 12px;
+
+  background: #f8fbfe;
+
+  overflow: hidden;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.medication-dose-control:focus-within {
+  background: #ffffff;
+  border-color: #75b9e8;
+  box-shadow: 0 0 0 4px rgba(64, 153, 216, 0.1);
+}
+
+.medication-dose-value {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 0 15px;
+
+  color: #6294bd;
+}
+
+.medication-dose-value svg {
+  flex-shrink: 0;
+  color: #5599cd;
+}
+
+.medication-dose-value input {
+  width: 100%;
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  padding: 14px 0;
+
+  background: transparent;
+  color: #17243c;
+
+  font: inherit;
+  font-weight: 500;
+}
+
+.medication-dose-value input::placeholder {
+  color: #9aaabd;
+}
+
+
+/* =========================================
+   SELECT / DROPDOWN
+   ========================================= */
+
+.medication-select-wrap {
+  position: relative;
+
+  width: 100%;
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  padding: 0 15px;
+
+  border: 1px solid #d6e3ee;
+  border-radius: 12px;
+
+  background: #f8fbfe;
+  color: #6294bd;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.medication-select-wrap:focus-within {
+  background: #ffffff;
+  border-color: #75b9e8;
+  box-shadow: 0 0 0 4px rgba(64, 153, 216, 0.1);
+}
+
+.medication-select-wrap > svg:first-child {
+  flex-shrink: 0;
+  color: #5599cd;
+}
+
+.medication-select-wrap select {
+  width: 100%;
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  padding: 14px 34px 14px 0;
+
+  background: transparent;
+  color: #17243c;
+
+  font: inherit;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.medication-select-wrap > svg:last-child {
+  position: absolute;
+  right: 15px;
+
+  color: #4e91c5;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   DOSE UNIT DROPDOWN
+   ========================================= */
+
+.medication-unit-select {
+  min-height: 52px;
+
+  padding-left: 16px;
+
+  border: 0;
+  border-left: 1px solid #d6e3ee;
+  border-radius: 0;
+
+  background: #edf7ff;
+}
+
+.medication-unit-select:focus-within {
+  border-color: #d6e3ee;
+  background: #e8f5ff;
+  box-shadow: none;
+}
+
+.medication-unit-select select {
+  color: #236fa8;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   CUSTOM INSTRUCTIONS
+   ========================================= */
+
+.medication-custom-instructions {
+  width: 100%;
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  margin-top: 3px;
+  padding: 0 15px;
+
+  border: 1px solid #d6e3ee;
+  border-radius: 12px;
+
+  background: #f8fbfe;
+  color: #6294bd;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.medication-custom-instructions:focus-within {
+  background: #ffffff;
+  border-color: #75b9e8;
+  box-shadow: 0 0 0 4px rgba(64, 153, 216, 0.1);
+}
+
+.medication-custom-instructions svg {
+  flex-shrink: 0;
+  color: #5599cd;
+}
+
+.medication-custom-instructions input {
+  width: 100%;
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  padding: 14px 0;
+
+  background: transparent;
+  color: #17243c;
+
+  font: inherit;
+  font-weight: 500;
+}
+
+.medication-custom-instructions input::placeholder {
+  color: #9aaabd;
+}
+
+
+/* =========================================
+   FORM + DETAILS BUTTONS
+   ========================================= */
+
+.medication-form-actions,
+.medication-details-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 28px;
+  padding-top: 22px;
+
+  border-top: 1px solid #e6eef5;
+}
+
+.medication-btn {
+  min-height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 10px 17px;
+
+  border-radius: 10px;
+  border: 1px solid transparent;
+
+  cursor: pointer;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.medication-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.medication-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.medication-btn-primary {
+  color: #ffffff;
+  background: #2585cf;
+  border-color: #2585cf;
+
+  box-shadow: 0 6px 16px rgba(37, 133, 207, 0.16);
+}
+
+.medication-btn-primary:hover:not(:disabled) {
+  background: #1977bd;
+  border-color: #1977bd;
+
+  box-shadow: 0 8px 20px rgba(37, 133, 207, 0.22);
+}
+
+.medication-btn-light {
+  color: #236fa8;
+  background: #edf7ff;
+  border-color: #cfe7f8;
+}
+
+.medication-btn-light:hover:not(:disabled) {
+  background: #e1f2ff;
+  border-color: #afd8f3;
+}
+
+.medication-btn-soft {
+  color: #3478a9;
+  background: #f3f9fd;
+  border-color: #d6e9f6;
+}
+
+.medication-btn-soft:hover:not(:disabled) {
+  background: #e8f5fd;
+  border-color: #bddff3;
+}
+
+
+/* =========================================
+   MEDICATION DETAILS
+   ========================================= */
+
+.medication-details {
+  padding: 32px;
+}
+
+.medication-details-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+
+  border-bottom: 1px solid #e4edf5;
+}
+
+.medication-title-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.medication-title-area h3 {
+  margin: 3px 0 0;
+
+  color: #15233d;
+
+  font-size: 27px;
+  font-weight: 750;
+}
+
+.medication-eyebrow {
+  margin: 0;
+
+  color: #7a8ca2;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.medication-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 86px;
+
+  padding: 8px 13px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.medication-status-active {
+  color: #1670aa;
+  background: #e7f5ff;
+  border: 1px solid #c9e7f9;
+}
+
+.medication-status-cancelled {
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid #dce5ec;
+}
+
+
+/* =========================================
+   MEDICATION INFORMATION CARDS
+   ========================================= */
+
+.medication-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.medication-info-card {
+  min-height: 94px;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  padding: 18px;
+
+  border: 1px solid #dce8f2;
+  border-radius: 14px;
+
+  background: #f9fcff;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.medication-info-card:hover {
+  transform: translateY(-1px);
+
+  border-color: #c7e1f3;
+
+  box-shadow: 0 8px 22px rgba(42, 101, 145, 0.07);
+}
+
+.medication-info-card-wide {
+  grid-column: 1 / -1;
+}
+
+.medication-info-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  color: #2382c8;
+  background: #e8f5ff;
+}
+
+.medication-info-card > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.medication-info-card span {
+  color: #78899e;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.02em;
+}
+
+.medication-info-card strong {
+  color: #1c2940;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  line-height: 1.4;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================
+   MEDICATION LIST CARDS
+   ========================================= */
+
+.medication-card {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  margin: 0 0 14px;
+  padding: 18px 20px;
+
+  border: 1px solid #d9e8f3 !important;
+  border-radius: 14px;
+
+  background: #f8fbfe !important;
+
+  box-shadow: 0 4px 14px rgba(40, 91, 130, 0.04);
+
+  color: #17243c;
+  text-align: left;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.medication-card:hover {
+  transform: translateY(-2px);
+
+  background: #f2f9ff !important;
+  border-color: #b9dcf4 !important;
+
+  box-shadow: 0 8px 22px rgba(40, 91, 130, 0.09);
+}
+
+
+/* Pill icon */
+
+.medication-card > .med {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  color: #2382c8;
+  background: #e8f5ff;
+}
+
+.medication-card > .med svg {
+  width: 22px;
+  height: 22px;
+}
+
+
+/* Main text */
+
+.medication-card-content {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 4px;
+}
+
+.medication-card-content b {
+  color: #17243c;
+
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.medication-card-content p {
+  margin: 0;
+
+  color: #61758d;
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.medication-card-content small {
+  color: #8293a7;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* Arrow */
+
+.medication-card > svg {
+  flex-shrink: 0;
+
+  color: #78a4c5;
+
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease;
+}
+
+.medication-card:hover > svg {
+  transform: translateX(3px);
+  color: #2382c8;
+}
+
+.item-list .medication-card:last-child {
+  margin-bottom: 0;
+}
+
+
+/* =========================================
+   ADD MEDICATION BUTTON
+   ========================================= */
+
+.medication-add-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 24px;
+
+  padding: 11px 18px;
+
+  border: 1px solid #cfe7f8;
+  border-radius: 10px;
+
+  background: #edf7ff;
+  color: #236fa8;
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.medication-add-button:hover {
+  background: #e1f2ff;
+  border-color: #afd8f3;
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 14px rgba(37, 133, 207, 0.1);
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 760px) {
+  .medication-form,
+  .medication-details {
+    padding: 22px;
+  }
+
+  .medication-form-grid,
+  .medication-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .medication-info-card-wide {
+    grid-column: auto;
+  }
+
+  .medication-details-header {
+    align-items: flex-start;
+  }
+
+  .medication-title-area h3 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 600px) {
+  .medication-card {
+    padding: 15px;
+    gap: 13px;
+  }
+
+  .medication-card > .med {
+    width: 43px;
+    height: 43px;
+    min-width: 43px;
+  }
+
+  .medication-dose-control {
+    grid-template-columns: minmax(0, 1fr) 100px;
+  }
+}
+
+@media (max-width: 520px) {
+  .medication-form,
+  .medication-details {
+    padding: 18px;
+  }
+
+  .medication-form-header,
+  .medication-title-area {
+    align-items: flex-start;
+  }
+
+  .medication-details-header {
+    flex-direction: column;
+  }
+
+  .medication-form-actions,
+  .medication-details-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .medication-btn {
+    width: 100%;
+  }
+}
+
+/* Dropdown option colors */
+
+/* .medication-select-wrap select option {
+  background: #edf7ff;
+  color: #17243c;
+}
+
+.medication-unit-select select option {
+  background: #edf7ff;
+  color: #236fa8;
+} */

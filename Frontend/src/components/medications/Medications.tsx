@@ -1,5 +1,19 @@
 import { FormEvent, useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  CalendarDays,
+  CheckCircle2,
+  ChevronDown,
+  Clock3,
+  Edit3,
+  FileText,
+  Pill,
+  Save,
+  XCircle,
+} from "lucide-react";
+
 import MedicationCard from "./MedicationCard";
+
 import {
   cancelMedication,
   createMedication,
@@ -12,6 +26,48 @@ import {
 type MedicationsProps = {
   show: (message: string) => void;
 };
+
+const DOSE_UNITS = ["mg", "mcg", "g", "mL", "IU"];
+
+const INSTRUCTION_OPTIONS = [
+  "Take once daily",
+  "Take twice daily",
+  "Take three times daily",
+  "Take once daily in the morning",
+  "Take once daily at night",
+  "Take once a week",
+  "Take as needed",
+  "Other",
+];
+
+function splitDose(dose: string) {
+  const trimmed = dose.trim();
+
+  const match = trimmed.match(
+    /^(.+?)\s*(mg|mcg|g|mL|IU)$/i
+  );
+
+  if (!match) {
+    return {
+      value: trimmed,
+      unit: "mg",
+    };
+  }
+
+  const rawUnit = match[2].toLowerCase();
+
+  const normalizedUnit =
+    rawUnit === "ml"
+      ? "mL"
+      : rawUnit === "iu"
+        ? "IU"
+        : rawUnit;
+
+  return {
+    value: match[1].trim(),
+    unit: normalizedUnit,
+  };
+}
 
 function Medications({ show }: MedicationsProps) {
   const [medications, setMedications] = useState<Medication[]>([]);
@@ -26,8 +82,14 @@ function Medications({ show }: MedicationsProps) {
     useState<Medication | null>(null);
 
   const [name, setName] = useState("");
-  const [dose, setDose] = useState("");
+
+  const [doseValue, setDoseValue] = useState("");
+  const [doseUnit, setDoseUnit] = useState("mg");
+
   const [instructions, setInstructions] = useState("");
+  const [customInstructions, setCustomInstructions] =
+    useState("");
+
   const [remainingDays, setRemainingDays] = useState("30");
   const [saving, setSaving] = useState(false);
 
@@ -52,9 +114,15 @@ function Medications({ show }: MedicationsProps) {
 
   function resetForm() {
     setName("");
-    setDose("");
+
+    setDoseValue("");
+    setDoseUnit("mg");
+
     setInstructions("");
+    setCustomInstructions("");
+
     setRemainingDays("30");
+
     setEditingMedication(null);
     setShowForm(false);
   }
@@ -64,8 +132,13 @@ function Medications({ show }: MedicationsProps) {
     setEditingMedication(null);
 
     setName("");
-    setDose("");
+
+    setDoseValue("");
+    setDoseUnit("mg");
+
     setInstructions("");
+    setCustomInstructions("");
+
     setRemainingDays("30");
 
     setShowForm(true);
@@ -81,8 +154,20 @@ function Medications({ show }: MedicationsProps) {
     setEditingMedication(medication);
 
     setName(medication.name);
-    setDose(medication.dose);
-    setInstructions(medication.instructions);
+
+    const parsedDose = splitDose(medication.dose);
+
+    setDoseValue(parsedDose.value);
+    setDoseUnit(parsedDose.unit);
+
+    if (INSTRUCTION_OPTIONS.includes(medication.instructions)) {
+      setInstructions(medication.instructions);
+      setCustomInstructions("");
+    } else {
+      setInstructions("Other");
+      setCustomInstructions(medication.instructions);
+    }
+
     setRemainingDays(String(medication.remainingDays));
 
     setShowForm(true);
@@ -93,6 +178,19 @@ function Medications({ show }: MedicationsProps) {
   ) {
     event.preventDefault();
 
+    const finalDose =
+      `${doseValue.trim()} ${doseUnit}`.trim();
+
+    const finalInstructions =
+      instructions === "Other"
+        ? customInstructions.trim()
+        : instructions.trim();
+
+    if (!finalInstructions) {
+      setError("Please enter medication instructions.");
+      return;
+    }
+
     try {
       setSaving(true);
       setError("");
@@ -102,8 +200,8 @@ function Medications({ show }: MedicationsProps) {
           editingMedication._id,
           {
             name: name.trim(),
-            dose: dose.trim(),
-            instructions: instructions.trim(),
+            dose: finalDose,
+            instructions: finalInstructions,
             remainingDays: Number(remainingDays),
           }
         );
@@ -122,8 +220,8 @@ function Medications({ show }: MedicationsProps) {
       } else {
         const medication = await createMedication({
           name: name.trim(),
-          dose: dose.trim(),
-          instructions: instructions.trim(),
+          dose: finalDose,
+          instructions: finalInstructions,
           remainingDays: Number(remainingDays),
         });
 
@@ -138,6 +236,7 @@ function Medications({ show }: MedicationsProps) {
       resetForm();
     } catch (error) {
       console.error(error);
+
       setError(
         editingMedication
           ? "Unable to update medication."
@@ -216,80 +315,185 @@ function Medications({ show }: MedicationsProps) {
         </div>
       )}
 
+      {/* ADD / EDIT MEDICATION */}
+
       {showForm && (
         <form
-          className="appointment-form"
+          className="appointment-form medication-form"
           onSubmit={handleSubmit}
         >
-          <div className="form-grid">
-            <label>
-              Medication name
-              <input
-                type="text"
-                value={name}
-                onChange={(event) =>
-                  setName(event.target.value)
-                }
-                placeholder="Lisinopril"
-                required
-              />
+          <div className="medication-form-header">
+            <div className="medication-form-icon">
+              <Pill size={25} />
+            </div>
+
+            <div>
+              <h3>
+                {editingMedication
+                  ? "Edit medication"
+                  : "Add medication"}
+              </h3>
+
+              <p>
+                {editingMedication
+                  ? "Update your medication information."
+                  : "Add medication details to your health record."}
+              </p>
+            </div>
+          </div>
+
+          <div className="medication-form-grid">
+
+            {/* MEDICATION NAME */}
+
+            <label className="medication-field">
+              <span>Medication name</span>
+
+              <div className="medication-input-wrap">
+                <Pill size={18} />
+
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(event) =>
+                    setName(event.target.value)
+                  }
+                  placeholder="Vitamin D"
+                  required
+                />
+              </div>
             </label>
 
-            <label>
-              Dose
-              <input
-                type="text"
-                value={dose}
-                onChange={(event) =>
-                  setDose(event.target.value)
-                }
-                placeholder="10 mg"
-                required
-              />
+            {/* DOSE */}
+
+            <label className="medication-field">
+              <span>Dose / Strength</span>
+
+              <div className="medication-dose-control">
+                <div className="medication-dose-value">
+                  <FileText size={18} />
+
+                  <input
+                    type="text"
+                    value={doseValue}
+                    onChange={(event) =>
+                      setDoseValue(event.target.value)
+                    }
+                    placeholder="50000"
+                    required
+                  />
+                </div>
+
+                <div className="medication-select-wrap medication-unit-select">
+                  <select
+                    value={doseUnit}
+                    onChange={(event) =>
+                      setDoseUnit(event.target.value)
+                    }
+                    aria-label="Dose unit"
+                  >
+                    {DOSE_UNITS.map((unit) => (
+                      <option key={unit} value={unit}>
+                        {unit}
+                      </option>
+                    ))}
+                  </select>
+
+                  <ChevronDown size={17} />
+                </div>
+              </div>
             </label>
 
-            <label>
-              Instructions
-              <input
-                type="text"
-                value={instructions}
-                onChange={(event) =>
-                  setInstructions(event.target.value)
-                }
-                placeholder="Take once daily in the morning"
-                required
-              />
+            {/* INSTRUCTIONS */}
+
+            <label className="medication-field">
+              <span>Instructions</span>
+
+              <div className="medication-select-wrap">
+                <FileText size={18} />
+
+                <select
+                  value={instructions}
+                  onChange={(event) =>
+                    setInstructions(event.target.value)
+                  }
+                  required
+                >
+                  <option value="" disabled>
+                    Select instructions
+                  </option>
+
+                  {INSTRUCTION_OPTIONS.map((instruction) => (
+                    <option
+                      key={instruction}
+                      value={instruction}
+                    >
+                      {instruction}
+                    </option>
+                  ))}
+                </select>
+
+                <ChevronDown size={17} />
+              </div>
+
+              {instructions === "Other" && (
+                <div className="medication-custom-instructions">
+                  <FileText size={18} />
+
+                  <input
+                    type="text"
+                    value={customInstructions}
+                    onChange={(event) =>
+                      setCustomInstructions(
+                        event.target.value
+                      )
+                    }
+                    placeholder="Enter custom instructions"
+                    required
+                  />
+                </div>
+              )}
             </label>
 
-            <label>
-              Remaining days
-              <input
-                type="number"
-                min="0"
-                value={remainingDays}
-                onChange={(event) =>
-                  setRemainingDays(event.target.value)
-                }
-                required
-              />
+            {/* REMAINING DAYS */}
+
+            <label className="medication-field">
+              <span>Remaining days</span>
+
+              <div className="medication-input-wrap">
+                <CalendarDays size={18} />
+
+                <input
+                  type="number"
+                  min="0"
+                  value={remainingDays}
+                  onChange={(event) =>
+                    setRemainingDays(event.target.value)
+                  }
+                  required
+                />
+              </div>
             </label>
           </div>
 
-          <div className="form-actions">
+          <div className="medication-form-actions">
             <button
               type="button"
-              className="outline"
+              className="medication-btn medication-btn-light"
               onClick={resetForm}
               disabled={saving}
             >
+              <ArrowLeft size={17} />
               Cancel
             </button>
 
             <button
               type="submit"
-              className="action"
+              className="medication-btn medication-btn-primary"
               disabled={saving}
             >
+              <Save size={17} />
+
               {saving
                 ? "Saving..."
                 : editingMedication
@@ -300,49 +504,121 @@ function Medications({ show }: MedicationsProps) {
         </form>
       )}
 
+      {/* MEDICATION DETAILS */}
+
       {selectedMedication && !showForm && (
-        <div className="appointment-form">
-          <h3>{selectedMedication.name}</h3>
+        <div className="appointment-form medication-details">
+          <div className="medication-details-header">
+            <div className="medication-title-area">
+              <div className="medication-main-icon">
+                <Pill size={27} />
+              </div>
 
-          <p>
-            <strong>Dose:</strong>{" "}
-            {selectedMedication.dose}
-          </p>
+              <div>
+                <p className="medication-eyebrow">
+                  Medication
+                </p>
 
-          <p>
-            <strong>Instructions:</strong>{" "}
-            {selectedMedication.instructions}
-          </p>
+                <h3>{selectedMedication.name}</h3>
+              </div>
+            </div>
 
-          <p>
-            <strong>Remaining:</strong>{" "}
-            {selectedMedication.remainingDays} days
-          </p>
+            <span
+              className={`medication-status ${
+                selectedMedication.active
+                  ? "medication-status-active"
+                  : "medication-status-cancelled"
+              }`}
+            >
+              {selectedMedication.active
+                ? "Active"
+                : "Cancelled"}
+            </span>
+          </div>
 
-          <p>
-            <strong>Status:</strong>{" "}
-            {selectedMedication.active
-              ? "Active"
-              : "Cancelled"}
-          </p>
+          <div className="medication-info-grid">
+            <div className="medication-info-card">
+              <div className="medication-info-icon">
+                <Pill size={20} />
+              </div>
 
-          {selectedMedication.lastTakenAt && (
-            <p>
-              <strong>Last taken:</strong>{" "}
-              {new Date(
-                selectedMedication.lastTakenAt
-              ).toLocaleString()}
-            </p>
-          )}
+              <div>
+                <span>Dose / Strength</span>
+                <strong>
+                  {selectedMedication.dose}
+                </strong>
+              </div>
+            </div>
 
-          <div className="form-actions">
+            <div className="medication-info-card">
+              <div className="medication-info-icon">
+                <FileText size={20} />
+              </div>
+
+              <div>
+                <span>Instructions</span>
+                <strong>
+                  {selectedMedication.instructions}
+                </strong>
+              </div>
+            </div>
+
+            <div className="medication-info-card">
+              <div className="medication-info-icon">
+                <CalendarDays size={20} />
+              </div>
+
+              <div>
+                <span>Remaining</span>
+                <strong>
+                  {selectedMedication.remainingDays} days
+                </strong>
+              </div>
+            </div>
+
+            <div className="medication-info-card">
+              <div className="medication-info-icon">
+                <CheckCircle2 size={20} />
+              </div>
+
+              <div>
+                <span>Status</span>
+                <strong>
+                  {selectedMedication.active
+                    ? "Active"
+                    : "Cancelled"}
+                </strong>
+              </div>
+            </div>
+
+            <div className="medication-info-card medication-info-card-wide">
+              <div className="medication-info-icon">
+                <Clock3 size={20} />
+              </div>
+
+              <div>
+                <span>Last taken</span>
+
+                <strong>
+                  {selectedMedication.lastTakenAt
+                    ? new Date(
+                        selectedMedication.lastTakenAt
+                      ).toLocaleString()
+                    : "Not recorded yet"}
+                </strong>
+              </div>
+            </div>
+          </div>
+
+          <div className="medication-details-actions">
             <button
               type="button"
-              className="outline"
+              className="medication-btn medication-btn-light"
               onClick={() =>
                 setSelectedMedication(null)
               }
             >
+              <ArrowLeft size={17} />
               Back
             </button>
 
@@ -350,37 +626,40 @@ function Medications({ show }: MedicationsProps) {
               <>
                 <button
                   type="button"
-                  className="outline"
+                  className="medication-btn medication-btn-light"
                   onClick={() =>
                     handleEditMedication(
                       selectedMedication
                     )
                   }
                 >
+                  <Edit3 size={17} />
                   Edit
                 </button>
 
                 <button
                   type="button"
-                  className="outline"
+                  className="medication-btn medication-btn-primary"
                   onClick={() =>
                     handleMarkTaken(
                       selectedMedication
                     )
                   }
                 >
+                  <CheckCircle2 size={17} />
                   Mark taken
                 </button>
 
                 <button
                   type="button"
-                  className="outline"
+                  className="medication-btn medication-btn-soft"
                   onClick={() =>
                     handleCancelMedication(
                       selectedMedication
                     )
                   }
                 >
+                  <XCircle size={17} />
                   Cancel medication
                 </button>
               </>
@@ -388,6 +667,8 @@ function Medications({ show }: MedicationsProps) {
           </div>
         </div>
       )}
+
+      {/* MEDICATION LIST */}
 
       {!selectedMedication && !showForm && (
         <>
@@ -408,7 +689,8 @@ function Medications({ show }: MedicationsProps) {
           </div>
 
           <button
-            className="action"
+            type="button"
+            className="medication-add-button"
             onClick={handleAddMedication}
           >
             Add medication

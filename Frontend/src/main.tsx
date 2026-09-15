@@ -10,6 +10,7 @@ import "./styles/landing.css";
 import "./styles/auth.css";
 import "./styles/home-extras.css";
 import "./styles/appointments.css";
+import "./styles/medications.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
