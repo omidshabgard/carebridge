@@ -14,6 +14,7 @@ import {
   HeartPulse,
   Home,
   Hospital,
+  LogOut,
   MapPin,
   Menu,
   MessageCircle,
@@ -39,6 +40,7 @@ import FindCareSection from "./FindCareSection";
 import AppointmentForm from "./components/appointments/AppointmentForm";
 import AppointmentDetails from "./components/appointments/AppointmentDetails";
 import Medications from "./components/medications/Medications";
+import "./styles/portalSignout.css";
 
 const nav: {
   name: Section;
@@ -340,7 +342,15 @@ function Brand({
   );
 }
 
-function Landing({ goPortal }: { goPortal: () => void }) {
+function Landing({
+  goPortal,
+  signedIn,
+  signOut,
+}: {
+  goPortal: () => void;
+  signedIn: boolean;
+  signOut: () => void;
+}) {
   return (
     <div className="landing">
       <header className="public-header">
@@ -376,6 +386,34 @@ function Landing({ goPortal }: { goPortal: () => void }) {
             <CalendarDays />
             Schedule an appointment
           </button>
+
+        {signedIn ? (
+          <>
+            <button
+              className="patient-portal-header-button"
+              onClick={goPortal}
+            >
+              <UserRound />
+              Patient Portal
+            </button>
+
+            <button
+              className="header-signout-button"
+              onClick={signOut}
+            >
+              <LogOut />
+              Sign out
+            </button>
+          </>
+        ) : (
+          <button
+            className="header-signin-button"
+            onClick={goPortal}
+          >
+            <UserRound />
+            Sign in
+          </button>
+        )}
         </div>
       </header>
 
@@ -711,6 +749,18 @@ function Portal({ goHome }: { goHome: () => void }) {
           >
             <MessageCircle />
             Help center
+          </button>
+
+          <button
+            className="portal-signout-button"
+            onClick={() => {
+              localStorage.removeItem("carebridge_token");
+              localStorage.removeItem("carebridge_user");
+              window.location.assign("/");
+            }}
+          >
+            <LogOut />
+            Sign out
           </button>
         </header>
 
@@ -1090,14 +1140,26 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  const signedIn = Boolean(localStorage.getItem("carebridge_token"));
+  const signedIn = Boolean(
+    localStorage.getItem("carebridge_token")
+  );
+
+  const signOut = () => {
+    localStorage.removeItem("carebridge_token");
+    localStorage.removeItem("carebridge_user");
+    window.location.assign("/");
+  };
 
   if (path === "/portal" && !signedIn) {
     window.history.replaceState({}, "", "/");
 
     return (
       <Landing
-        goPortal={() => window.dispatchEvent(new Event("carebridge-auth"))}
+        signedIn={false}
+        signOut={signOut}
+        goPortal={() =>
+          window.dispatchEvent(new Event("carebridge-auth"))
+        }
       />
     );
   }
@@ -1106,6 +1168,8 @@ export default function App() {
     <Portal goHome={() => navigate("/")} />
   ) : (
     <Landing
+      signedIn={signedIn}
+      signOut={signOut}
       goPortal={() =>
         signedIn
           ? navigate("/portal")

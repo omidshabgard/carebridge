@@ -1,0 +1,26 @@
+/* Stable sign-out action in the patient portal top header */
+.portal-signout-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #d8e2e8;
+  border-radius: 9px;
+  background: #fff;
+  color: #b43b32;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.portal-signout-button:hover {
+  background: #fff5f4;
+  border-color: #edc9c5;
+}
+
+.portal-signout-button svg {
+  width: 17px;
+  height: 17px;
+}
