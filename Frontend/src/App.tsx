@@ -31,6 +31,7 @@ import {
   type Appointment,
 } from "./services/appointmentService";
 
+import { getMedications, type Medication } from "./services/medicationService";
 
 import type { PortalItem, Section } from "./types";
 import AboutSection from "./AboutSection";
@@ -134,8 +135,7 @@ const content: Record<
     items: [
       {
         title: "Dr. Maya Chen",
-        detail:
-          "Your lab results look good. Let’s review them at your visit.",
+        detail: "Your lab results look good. Let’s review them at your visit.",
         meta: "Today • 9:15 AM",
         status: "Unread",
       },
@@ -368,14 +368,14 @@ function Landing({ goPortal }: { goPortal: () => void }) {
           </a>
 
           <button
-  onClick={() => {
-    localStorage.setItem("carebridge_portal_section", "Appointments");
-    goPortal();
-  }}
->
-  <CalendarDays />
-  Schedule an appointment
-</button>
+            onClick={() => {
+              localStorage.setItem("carebridge_portal_section", "Appointments");
+              goPortal();
+            }}
+          >
+            <CalendarDays />
+            Schedule an appointment
+          </button>
         </div>
       </header>
 
@@ -424,23 +424,21 @@ function Landing({ goPortal }: { goPortal: () => void }) {
             </div>
           </div>
           <div className="hero-handwritten" aria-hidden="true">
-  <span>
-    Better care
-    <br />
-    together ♡
-  </span>
+            <span>
+              Better care
+              <br />
+              together ♡
+            </span>
 
-  <span className="hero-handwritten-arrow">↘</span>
-</div>
+            <span className="hero-handwritten-arrow">↘</span>
+          </div>
           <aside>
             <div>
               <Clock />
 
               <span>
                 <b>Need care today?</b>
-                <small>
-                  Find same-day and urgent care options near you.
-                </small>
+                <small>Find same-day and urgent care options near you.</small>
               </span>
 
               <button>
@@ -497,11 +495,10 @@ function Landing({ goPortal }: { goPortal: () => void }) {
           </button>
         </section>
 
-       <section className="care-about-layout">
-  <FindCareSection />
-  <AboutSection />
-</section>
-    
+        <section className="care-about-layout">
+          <FindCareSection />
+          <AboutSection />
+        </section>
       </main>
 
       <footer>
@@ -528,12 +525,10 @@ function Landing({ goPortal }: { goPortal: () => void }) {
 
 function Portal({ goHome }: { goHome: () => void }) {
   const [active, setActive] = useState<Section>(() => {
-    const requestedSection = localStorage.getItem(
-      "carebridge_portal_section"
-    );
+    const requestedSection = localStorage.getItem("carebridge_portal_section");
 
     const savedSection = localStorage.getItem(
-      "carebridge_active_section"
+      "carebridge_active_section",
     ) as Section | null;
 
     localStorage.removeItem("carebridge_portal_section");
@@ -551,6 +546,7 @@ function Portal({ goHome }: { goHome: () => void }) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [appointmentsLoading, setAppointmentsLoading] = useState(false);
   const [appointmentsError, setAppointmentsError] = useState("");
+  const [medications, setMedications] = useState<Medication[]>([]);
   const [showAppointmentForm, setShowAppointmentForm] = useState(false);
   const [selectedAppointment, setSelectedAppointment] =
     useState<Appointment | null>(null);
@@ -578,6 +574,19 @@ function Portal({ goHome }: { goHome: () => void }) {
     loadAppointments();
   }, []);
 
+  useEffect(() => {
+    async function loadMedications() {
+      try {
+        const data = await getMedications();
+        setMedications(data);
+      } catch (error) {
+        console.error("Unable to load medications:", error);
+      }
+    }
+
+    loadMedications();
+  }, []);
+
   const show = (message: string) => {
     setToast(message);
 
@@ -587,51 +596,46 @@ function Portal({ goHome }: { goHome: () => void }) {
   };
 
   const items = useMemo(() => {
-  if (active === "Overview") {
-    return [];
-  }
+    if (active === "Overview") {
+      return [];
+    }
 
-  if (active === "Appointments") {
-    return appointments
-      .map((appointment) => {
-        const date = new Date(appointment.startsAt);
+    if (active === "Appointments") {
+      return appointments
+        .map((appointment) => {
+          const date = new Date(appointment.startsAt);
 
-        return {
-          appointmentId: appointment._id,
-          title: appointment.reason,
-          detail: `${appointment.providerName} • ${appointment.specialty}`,
-          meta: date.toLocaleString("en-US", {
-            month: "long",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-          }),
-          status:
-            appointment.status.charAt(0).toUpperCase() +
-            appointment.status.slice(1),
-        };
-      })
-      .filter((item) =>
-        (item.title + item.detail)
-          .toLowerCase()
-          .includes(query.toLowerCase())
-      );
-  }
+          return {
+            appointmentId: appointment._id,
+            title: appointment.reason,
+            detail: `${appointment.providerName} • ${appointment.specialty}`,
+            meta: date.toLocaleString("en-US", {
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+            }),
+            status:
+              appointment.status.charAt(0).toUpperCase() +
+              appointment.status.slice(1),
+          };
+        })
+        .filter((item) =>
+          (item.title + item.detail)
+            .toLowerCase()
+            .includes(query.toLowerCase()),
+        );
+    }
 
-  return content[active].items.filter((item) =>
-    (item.title + item.detail)
-      .toLowerCase()
-      .includes(query.toLowerCase())
-  );
-}, [active, query, appointments]);
+    return content[active].items.filter((item) =>
+      (item.title + item.detail).toLowerCase().includes(query.toLowerCase()),
+    );
+  }, [active, query, appointments]);
 
   return (
     <div className="app">
       <aside className={mobile ? "sidebar open" : "sidebar"}>
-        <button
-          className="close"
-          onClick={() => setMobile(false)}
-        >
+        <button className="close" onClick={() => setMobile(false)}>
           <X />
         </button>
 
@@ -679,10 +683,7 @@ function Portal({ goHome }: { goHome: () => void }) {
 
       <main>
         <header>
-          <button
-            className="hamburger"
-            onClick={() => setMobile(true)}
-          >
+          <button className="hamburger" onClick={() => setMobile(true)}>
             <Menu />
           </button>
 
@@ -691,9 +692,7 @@ function Portal({ goHome }: { goHome: () => void }) {
 
             <input
               value={query}
-              onChange={(event) =>
-                setQuery(event.target.value)
-              }
+              onChange={(event) => setQuery(event.target.value)}
               placeholder="Search this section..."
             />
           </label>
@@ -739,11 +738,7 @@ function Portal({ goHome }: { goHome: () => void }) {
                     team—all in one calm, secure place.
                   </p>
 
-                  <button
-                    onClick={() =>
-                      setActive("Appointments")
-                    }
-                  >
+                  <button onClick={() => setActive("Appointments")}>
                     <CalendarDays />
                     Schedule a visit
                   </button>
@@ -769,11 +764,7 @@ function Portal({ goHome }: { goHome: () => void }) {
                   <ChevronRight />
                 </button>
 
-                <button
-                  onClick={() =>
-                    setActive("Appointments")
-                  }
-                >
+                <button onClick={() => setActive("Appointments")}>
                   <span className="primary">
                     <Stethoscope />
                   </span>
@@ -786,11 +777,7 @@ function Portal({ goHome }: { goHome: () => void }) {
                   <ChevronRight />
                 </button>
 
-                <button
-                  onClick={() =>
-                    setActive("Care team")
-                  }
-                >
+                <button onClick={() => setActive("Care team")}>
                   <span className="specialty">
                     <UserRound />
                   </span>
@@ -808,16 +795,10 @@ function Portal({ goHome }: { goHome: () => void }) {
                 <div>
                   <small>FRIDAY, SEPTEMBER 4</small>
                   <h2>Good morning, Omid.</h2>
-                  <p>
-                    Here’s what’s happening with your health today.
-                  </p>
+                  <p>Here’s what’s happening with your health today.</p>
                 </div>
 
-                <button
-                  onClick={() =>
-                    setActive("Appointments")
-                  }
-                >
+                <button onClick={() => setActive("Appointments")}>
                   <CalendarDays />
                   Book appointment
                 </button>
@@ -857,35 +838,61 @@ function Portal({ goHome }: { goHome: () => void }) {
                       <h3>Upcoming appointments</h3>
                     </div>
 
-                    <button
-                      onClick={() =>
-                        setActive("Appointments")
-                      }
-                    >
+                    <button onClick={() => setActive("Appointments")}>
                       View all
                       <ChevronRight />
                     </button>
                   </div>
 
-                  {content.Appointments.items.map((item) => (
-                    <div
-                      className="row"
-                      key={item.title}
-                    >
-                      <span className="date">
-                        12
-                        <small>SEP</small>
-                      </span>
+                  {appointments
+                    .filter(
+                      (appointment) =>
+                        appointment.status !== "cancelled" &&
+                        new Date(appointment.startsAt).getTime() >= Date.now(),
+                    )
+                    .sort(
+                      (a, b) =>
+                        new Date(a.startsAt).getTime() -
+                        new Date(b.startsAt).getTime(),
+                    )
+                    .slice(0, 2)
+                    .map((appointment) => {
+                      const date = new Date(appointment.startsAt);
 
-                      <div>
-                        <b>{item.title}</b>
-                        <p>{item.detail}</p>
-                        <small>{item.meta}</small>
-                      </div>
+                      return (
+                        <div className="row" key={appointment._id}>
+                          <span className="date">
+                            {date.getDate()}
+                            <small>
+                              {date
+                                .toLocaleString("en-US", { month: "short" })
+                                .toUpperCase()}
+                            </small>
+                          </span>
 
-                      <i>{item.status}</i>
-                    </div>
-                  ))}
+                          <div>
+                            <b>{appointment.reason}</b>
+                            <p>
+                              {appointment.providerName} •{" "}
+                              {appointment.specialty}
+                            </p>
+                            <small>
+                              {date.toLocaleString("en-US", {
+                                month: "long",
+                                day: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                              })}
+                            </small>
+                          </div>
+
+                          <i>
+                            {appointment.status.charAt(0).toUpperCase() +
+                              appointment.status.slice(1)}
+                          </i>
+                        </div>
+                      );
+                    })}
                 </article>
 
                 <article className="card">
@@ -895,51 +902,34 @@ function Portal({ goHome }: { goHome: () => void }) {
                       <h3>Medications</h3>
                     </div>
 
-                    <button
-                      onClick={() =>
-                        setActive("Medications")
-                      }
-                    >
+                    <button onClick={() => setActive("Medications")}>
                       View all
                       <ChevronRight />
                     </button>
                   </div>
 
-                  {content.Medications.items.map(
-                    (item, index) => (
-                      <div
-                        className="row"
-                        key={item.title}
-                      >
-                        <span
-                          className={
-                            index ? "med amber" : "med"
-                          }
-                        >
+                  {medications
+                    .filter((medication) => medication.active)
+                    .slice(0, 2)
+                    .map((medication, index) => (
+                      <div className="row" key={medication._id}>
+                        <span className={index ? "med amber" : "med"}>
                           <Pill />
                         </span>
 
                         <div>
-                          <b>{item.title}</b>
-                          <p>{item.detail}</p>
-                          <small>{item.meta}</small>
-                        </div>
+                          <b>
+                            {medication.name} • {medication.dose}
+                          </b>
 
-                        {!index && (
-                          <button
-                            className="outline"
-                            onClick={() =>
-                              show(
-                                "Lisinopril marked as taken."
-                              )
-                            }
-                          >
-                            Mark taken
-                          </button>
-                        )}
+                          <p>{medication.instructions}</p>
+
+                          <small>
+                            {medication.remainingDays} days remaining
+                          </small>
+                        </div>
                       </div>
-                    )
-                  )}
+                    ))}
                 </article>
               </section>
             </>
@@ -963,9 +953,9 @@ function Portal({ goHome }: { goHome: () => void }) {
                 </button>
               </div>
               {active === "Medications" ? (
-	<Medications show={show} />
-) : active === "Appointments" && selectedAppointment ? (
-	<AppointmentDetails
+                <Medications show={show} />
+              ) : active === "Appointments" && selectedAppointment ? (
+                <AppointmentDetails
                   appointment={selectedAppointment}
                   onBack={() => setSelectedAppointment(null)}
                   onCancelled={(updatedAppointment) => {
@@ -973,12 +963,22 @@ function Portal({ goHome }: { goHome: () => void }) {
                       current.map((appointment) =>
                         appointment._id === updatedAppointment._id
                           ? updatedAppointment
-                          : appointment
-                      )
+                          : appointment,
+                      ),
                     );
 
                     setSelectedAppointment(updatedAppointment);
                     show("Appointment cancelled successfully.");
+                  }}
+                  onDeleted={(appointmentId) => {
+                    setAppointments((current) =>
+                      current.filter(
+                        (appointment) => appointment._id !== appointmentId,
+                      ),
+                    );
+
+                    setSelectedAppointment(null);
+                    show("Appointment deleted permanently.");
                   }}
                 />
               ) : (
@@ -986,10 +986,7 @@ function Portal({ goHome }: { goHome: () => void }) {
                   {active === "Appointments" && showAppointmentForm && (
                     <AppointmentForm
                       onCreated={(appointment) => {
-                        setAppointments((current) => [
-                          appointment,
-                          ...current,
-                        ]);
+                        setAppointments((current) => [appointment, ...current]);
                         setShowAppointmentForm(false);
                         show("Appointment booked successfully.");
                       }}
@@ -1019,11 +1016,10 @@ function Portal({ goHome }: { goHome: () => void }) {
                                 active === "Appointments" &&
                                 "appointmentId" in item
                               ) {
-                                const appointment =
-                                  appointments.find(
-                                    (current) =>
-                                      current._id === item.appointmentId
-                                  );
+                                const appointment = appointments.find(
+                                  (current) =>
+                                    current._id === item.appointmentId,
+                                );
 
                                 if (appointment) {
                                   setSelectedAppointment(appointment);
@@ -1074,9 +1070,7 @@ function Portal({ goHome }: { goHome: () => void }) {
 }
 
 export default function App() {
-  const [path, setPath] = useState(
-    window.location.pathname
-  );
+  const [path, setPath] = useState(window.location.pathname);
 
   useEffect(() => {
     const sync = () => {
@@ -1096,36 +1090,26 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  const signedIn = Boolean(
-    localStorage.getItem("carebridge_token")
-  );
+  const signedIn = Boolean(localStorage.getItem("carebridge_token"));
 
   if (path === "/portal" && !signedIn) {
     window.history.replaceState({}, "", "/");
 
     return (
       <Landing
-        goPortal={() =>
-          window.dispatchEvent(
-            new Event("carebridge-auth")
-          )
-        }
+        goPortal={() => window.dispatchEvent(new Event("carebridge-auth"))}
       />
     );
   }
 
   return path === "/portal" ? (
-    <Portal
-      goHome={() => navigate("/")}
-    />
+    <Portal goHome={() => navigate("/")} />
   ) : (
     <Landing
       goPortal={() =>
         signedIn
           ? navigate("/portal")
-          : window.dispatchEvent(
-              new Event("carebridge-auth")
-            )
+          : window.dispatchEvent(new Event("carebridge-auth"))
       }
     />
   );

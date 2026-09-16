@@ -6,6 +6,7 @@ import { getAppointments } from "../../controllers/appointments/getAppointments.
 import { getAppointmentById } from "../../controllers/appointments/getAppointmentById.js";
 import { createAppointment } from "../../controllers/appointments/createAppointment.js";
 import { cancelAppointment } from "../../controllers/appointments/cancelAppointment.js";
+import { deleteAppointment } from "../../controllers/appointments/deleteAppointment.js";
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.get("/", getAppointments);
 router.get("/:id", getAppointmentById);
 router.post("/", createAppointment);
 router.patch("/:id/cancel", cancelAppointment);
+router.delete("/:id", deleteAppointment);
 
 export default router;

@@ -1,7 +1,17 @@
 import { useState } from "react";
+import {
+  ArrowLeft,
+  CalendarDays,
+  Clock,
+  MapPin,
+  Stethoscope,
+  Trash2,
+  UserRound,
+} from "lucide-react";
 
 import {
   cancelAppointment,
+  deleteAppointment,
   type Appointment,
 } from "../../services/appointmentService";
 
@@ -9,12 +19,14 @@ type Props = {
   appointment: Appointment;
   onBack: () => void;
   onCancelled: (appointment: Appointment) => void;
+  onDeleted: (appointmentId: string) => void;
 };
 
 export default function AppointmentDetails({
   appointment,
   onBack,
   onCancelled,
+  onDeleted,
 }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -24,6 +36,12 @@ export default function AppointmentDetails({
   const canCancel =
     appointment.status !== "cancelled" &&
     appointment.status !== "completed";
+
+  const canDelete = appointment.status === "cancelled";
+
+  const formattedStatus =
+    appointment.status.charAt(0).toUpperCase() +
+    appointment.status.slice(1);
 
   async function handleCancel() {
     const confirmed = window.confirm(
@@ -51,61 +69,186 @@ export default function AppointmentDetails({
     }
   }
 
+  async function handleDelete() {
+    const confirmed = window.confirm(
+      "Permanently delete this cancelled appointment? This cannot be undone."
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setBusy(true);
+      setError("");
+
+      await deleteAppointment(appointment._id);
+
+      onDeleted(appointment._id);
+    } catch (error) {
+      console.error(error);
+      setError("Unable to delete appointment.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <section className="appointment-details">
-      <button type="button" onClick={onBack}>
-        Back to appointments
-      </button>
+      <div className="appointment-details-header">
+        <div className="appointment-title-area">
+          <span className="appointment-main-icon">
+            <CalendarDays />
+          </span>
 
-      <h2>{appointment.reason}</h2>
+          <div>
+            <p className="appointment-eyebrow">
+              APPOINTMENT DETAILS
+            </p>
 
-      <p>
-        <strong>Provider:</strong> {appointment.providerName}
-      </p>
+            <h2>{appointment.reason}</h2>
+          </div>
+        </div>
 
-      <p>
-        <strong>Specialty:</strong> {appointment.specialty}
-      </p>
+        <span
+          className={`appointment-status appointment-status-${appointment.status}`}
+        >
+          {formattedStatus}
+        </span>
+      </div>
 
-      <p>
-        <strong>Date:</strong>{" "}
-        {date.toLocaleString("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-        })}
-      </p>
+      <div className="appointment-info-grid">
+        <article className="appointment-info-card">
+          <span className="appointment-info-icon">
+            <UserRound />
+          </span>
 
-      <p>
-        <strong>Visit type:</strong>{" "}
-        {appointment.visitType === "video"
-          ? "Video visit"
-          : "In person"}
-      </p>
+          <div>
+            <span>Provider</span>
+            <strong>{appointment.providerName}</strong>
+          </div>
+        </article>
 
-      <p>
-        <strong>Status:</strong>{" "}
-        {appointment.status.charAt(0).toUpperCase() +
-          appointment.status.slice(1)}
-      </p>
+        <article className="appointment-info-card">
+          <span className="appointment-info-icon">
+            <Stethoscope />
+          </span>
 
-      <p>
-        <strong>Reason for visit:</strong> {appointment.reason}
-      </p>
+          <div>
+            <span>Specialty</span>
+            <strong>{appointment.specialty}</strong>
+          </div>
+        </article>
 
-      {error && <p>{error}</p>}
+        <article className="appointment-info-card">
+          <span className="appointment-info-icon">
+            <CalendarDays />
+          </span>
 
-      {canCancel && (
+          <div>
+            <span>Date</span>
+            <strong>
+              {date.toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </strong>
+          </div>
+        </article>
+
+        <article className="appointment-info-card">
+          <span className="appointment-info-icon">
+            <Clock />
+          </span>
+
+          <div>
+            <span>Time</span>
+            <strong>
+              {date.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </strong>
+          </div>
+        </article>
+
+        <article className="appointment-info-card">
+          <span className="appointment-info-icon">
+            <MapPin />
+          </span>
+
+          <div>
+            <span>Visit type</span>
+            <strong>
+              {appointment.visitType === "video"
+                ? "Video visit"
+                : "In person"}
+            </strong>
+          </div>
+        </article>
+
+        <article className="appointment-info-card">
+          <span className="appointment-info-icon">
+            <CalendarDays />
+          </span>
+
+          <div>
+            <span>Status</span>
+            <strong>{formattedStatus}</strong>
+          </div>
+        </article>
+
+        <article className="appointment-info-card appointment-info-card-wide">
+          <span className="appointment-info-icon">
+            <Stethoscope />
+          </span>
+
+          <div>
+            <span>Reason for visit</span>
+            <strong>{appointment.reason}</strong>
+          </div>
+        </article>
+      </div>
+
+      {error && (
+        <p className="appointment-details-error">{error}</p>
+      )}
+
+      <div className="appointment-details-actions">
         <button
           type="button"
-          onClick={handleCancel}
+          className="appointment-btn appointment-btn-light"
+          onClick={onBack}
           disabled={busy}
         >
-          {busy ? "Cancelling..." : "Cancel appointment"}
+          <ArrowLeft size={17} />
+          Back to appointments
         </button>
-      )}
+
+        {canCancel && (
+          <button
+            type="button"
+            className="appointment-btn appointment-btn-soft"
+            onClick={handleCancel}
+            disabled={busy}
+          >
+            {busy ? "Cancelling..." : "Cancel appointment"}
+          </button>
+        )}
+
+        {canDelete && (
+          <button
+            type="button"
+            className="appointment-btn appointment-btn-danger"
+            onClick={handleDelete}
+            disabled={busy}
+          >
+            <Trash2 size={17} />
+            {busy ? "Deleting..." : "Delete appointment"}
+          </button>
+        )}
+      </div>
     </section>
   );
 }

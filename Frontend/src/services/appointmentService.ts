@@ -41,7 +41,7 @@ export async function getAppointments(): Promise<Appointment[]> {
 }
 
 export async function createAppointment(
-  input: CreateAppointmentInput
+  input: CreateAppointmentInput,
 ): Promise<Appointment> {
   const token = getToken();
 
@@ -62,7 +62,7 @@ export async function createAppointment(
 }
 
 export async function cancelAppointment(
-  appointmentId: string
+  appointmentId: string,
 ): Promise<Appointment> {
   const token = getToken();
 
@@ -73,7 +73,7 @@ export async function cancelAppointment(
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 
   if (!response.ok) {
@@ -81,4 +81,22 @@ export async function cancelAppointment(
   }
 
   return response.json();
+}
+
+export async function deleteAppointment(appointmentId: string): Promise<void> {
+  const token = getToken();
+
+  const response = await fetch(
+    `${API_BASE_URL}/appointments/${appointmentId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to delete appointment");
+  }
 }
