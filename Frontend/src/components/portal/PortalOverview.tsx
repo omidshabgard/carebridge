@@ -1,0 +1,242 @@
+import {
+  Activity,
+  CalendarDays,
+  ChevronRight,
+  HeartPulse,
+  Hospital,
+  Pill,
+  Stethoscope,
+  UserRound,
+} from "lucide-react";
+
+import type { Appointment } from "../../services/appointmentService";
+import type { Medication } from "../../services/medicationService";
+import type { Section } from "../../types";
+import Metric from "./Metric";
+
+type PortalOverviewProps = {
+  appointments: Appointment[];
+  medications: Medication[];
+  onSectionChange: (section: Section) => void;
+  show: (message: string) => void;
+};
+
+export default function PortalOverview({
+  appointments,
+  medications,
+  onSectionChange,
+  show,
+}: PortalOverviewProps) {
+  return (
+    <>
+      <section className="hero">
+        <div>
+          <span>
+            <HeartPulse />
+            YOUR HEALTH, CONNECTED
+          </span>
+
+          <h1>Care that knows you.</h1>
+
+          <p>
+            Manage your health and stay connected with your care team—all in
+            one calm, secure place.
+          </p>
+
+          <button onClick={() => onSectionChange("Appointments")}>
+            <CalendarDays />
+            Schedule a visit
+          </button>
+        </div>
+      </section>
+
+      <section className="care-types">
+        <button
+          onClick={() => {
+            onSectionChange("Appointments");
+            show("Urgent care locations loaded.");
+          }}
+        >
+          <span className="urgent">
+            <Hospital />
+          </span>
+
+          <b>
+            Urgent Care
+            <small>Same-day help</small>
+          </b>
+
+          <ChevronRight />
+        </button>
+
+        <button onClick={() => onSectionChange("Appointments")}>
+          <span className="primary">
+            <Stethoscope />
+          </span>
+
+          <b>
+            Primary Care
+            <small>Everyday wellness</small>
+          </b>
+
+          <ChevronRight />
+        </button>
+
+        <button onClick={() => onSectionChange("Care team")}>
+          <span className="specialty">
+            <UserRound />
+          </span>
+
+          <b>
+            Specialty Care
+            <small>Expert treatment</small>
+          </b>
+
+          <ChevronRight />
+        </button>
+      </section>
+
+      <div className="welcome">
+        <div>
+          <small>FRIDAY, SEPTEMBER 4</small>
+          <h2>Good morning, Omid.</h2>
+          <p>Here’s what’s happening with your health today.</p>
+        </div>
+
+        <button onClick={() => onSectionChange("Appointments")}>
+          <CalendarDays />
+          Book appointment
+        </button>
+      </div>
+
+      <section className="metrics">
+        <Metric
+          title="BLOOD PRESSURE"
+          value="118/76"
+          unit="mmHg"
+          tone="red"
+          icon={HeartPulse}
+        />
+
+        <Metric
+          title="HEART RATE"
+          value="72"
+          unit="bpm"
+          tone="teal"
+          icon={Activity}
+        />
+
+        <Metric
+          title="WEIGHT"
+          value="174"
+          unit="lbs"
+          tone="blue"
+          icon={UserRound}
+        />
+      </section>
+
+      <section className="overview-grid">
+        <article className="card">
+          <div className="card-head">
+            <div>
+              <small>YOUR SCHEDULE</small>
+              <h3>Upcoming appointments</h3>
+            </div>
+
+            <button onClick={() => onSectionChange("Appointments")}>
+              View all
+              <ChevronRight />
+            </button>
+          </div>
+
+          {appointments
+            .filter(
+              (appointment) =>
+                appointment.status !== "cancelled" &&
+                new Date(appointment.startsAt).getTime() >= Date.now(),
+            )
+            .sort(
+              (a, b) =>
+                new Date(a.startsAt).getTime() -
+                new Date(b.startsAt).getTime(),
+            )
+            .slice(0, 2)
+            .map((appointment) => {
+              const date = new Date(appointment.startsAt);
+
+              return (
+                <div className="row" key={appointment._id}>
+                  <span className="date">
+                    {date.getDate()}
+
+                    <small>
+                      {date
+                        .toLocaleString("en-US", { month: "short" })
+                        .toUpperCase()}
+                    </small>
+                  </span>
+
+                  <div>
+                    <b>{appointment.reason}</b>
+
+                    <p>
+                      {appointment.providerName} • {appointment.specialty}
+                    </p>
+
+                    <small>
+                      {date.toLocaleString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </small>
+                  </div>
+
+                  <i>
+                    {appointment.status.charAt(0).toUpperCase() +
+                      appointment.status.slice(1)}
+                  </i>
+                </div>
+              );
+            })}
+        </article>
+
+        <article className="card">
+          <div className="card-head">
+            <div>
+              <small>TODAY</small>
+              <h3>Medications</h3>
+            </div>
+
+            <button onClick={() => onSectionChange("Medications")}>
+              View all
+              <ChevronRight />
+            </button>
+          </div>
+
+          {medications
+            .filter((medication) => medication.active)
+            .slice(0, 2)
+            .map((medication, index) => (
+              <div className="row" key={medication._id}>
+                <span className={index ? "med amber" : "med"}>
+                  <Pill />
+                </span>
+
+                <div>
+                  <b>
+                    {medication.name} • {medication.dose}
+                  </b>
+
+                  <p>{medication.instructions}</p>
+
+                  <small>{medication.remainingDays} days remaining</small>
+                </div>
+              </div>
+            ))}
+        </article>
+      </section>
+    </>
+  );
+}
