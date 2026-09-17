@@ -9,6 +9,7 @@ import {
   FileText,
   Pill,
   Save,
+  Trash2,
   XCircle,
 } from "lucide-react";
 
@@ -17,6 +18,7 @@ import MedicationCard from "./MedicationCard";
 import {
   cancelMedication,
   createMedication,
+  deleteMedication,
   getMedications,
   markMedicationTaken,
   updateMedication,
@@ -71,6 +73,7 @@ function splitDose(dose: string) {
 
 function Medications({ show }: MedicationsProps) {
   const [medications, setMedications] = useState<Medication[]>([]);
+
   const [selectedMedication, setSelectedMedication] =
     useState<Medication | null>(null);
 
@@ -78,6 +81,7 @@ function Medications({ show }: MedicationsProps) {
   const [error, setError] = useState("");
 
   const [showForm, setShowForm] = useState(false);
+
   const [editingMedication, setEditingMedication] =
     useState<Medication | null>(null);
 
@@ -87,10 +91,12 @@ function Medications({ show }: MedicationsProps) {
   const [doseUnit, setDoseUnit] = useState("mg");
 
   const [instructions, setInstructions] = useState("");
+
   const [customInstructions, setCustomInstructions] =
     useState("");
 
   const [remainingDays, setRemainingDays] = useState("30");
+
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -100,9 +106,11 @@ function Medications({ show }: MedicationsProps) {
         setError("");
 
         const data = await getMedications();
+
         setMedications(data);
       } catch (error) {
         console.error(error);
+
         setError("Unable to load medications.");
       } finally {
         setLoading(false);
@@ -160,7 +168,11 @@ function Medications({ show }: MedicationsProps) {
     setDoseValue(parsedDose.value);
     setDoseUnit(parsedDose.unit);
 
-    if (INSTRUCTION_OPTIONS.includes(medication.instructions)) {
+    if (
+      INSTRUCTION_OPTIONS.includes(
+        medication.instructions
+      )
+    ) {
       setInstructions(medication.instructions);
       setCustomInstructions("");
     } else {
@@ -168,7 +180,9 @@ function Medications({ show }: MedicationsProps) {
       setCustomInstructions(medication.instructions);
     }
 
-    setRemainingDays(String(medication.remainingDays));
+    setRemainingDays(
+      String(medication.remainingDays)
+    );
 
     setShowForm(true);
   }
@@ -187,7 +201,10 @@ function Medications({ show }: MedicationsProps) {
         : instructions.trim();
 
     if (!finalInstructions) {
-      setError("Please enter medication instructions.");
+      setError(
+        "Please enter medication instructions."
+      );
+
       return;
     }
 
@@ -196,15 +213,17 @@ function Medications({ show }: MedicationsProps) {
       setError("");
 
       if (editingMedication) {
-        const updatedMedication = await updateMedication(
-          editingMedication._id,
-          {
-            name: name.trim(),
-            dose: finalDose,
-            instructions: finalInstructions,
-            remainingDays: Number(remainingDays),
-          }
-        );
+        const updatedMedication =
+          await updateMedication(
+            editingMedication._id,
+            {
+              name: name.trim(),
+              dose: finalDose,
+              instructions: finalInstructions,
+              remainingDays:
+                Number(remainingDays),
+            }
+          );
 
         setMedications((current) =>
           current.map((item) =>
@@ -214,23 +233,31 @@ function Medications({ show }: MedicationsProps) {
           )
         );
 
-        setSelectedMedication(updatedMedication);
+        setSelectedMedication(
+          updatedMedication
+        );
 
-        show("Medication updated successfully.");
+        show(
+          "Medication updated successfully."
+        );
       } else {
-        const medication = await createMedication({
-          name: name.trim(),
-          dose: finalDose,
-          instructions: finalInstructions,
-          remainingDays: Number(remainingDays),
-        });
+        const medication =
+          await createMedication({
+            name: name.trim(),
+            dose: finalDose,
+            instructions: finalInstructions,
+            remainingDays:
+              Number(remainingDays),
+          });
 
         setMedications((current) => [
           medication,
           ...current,
         ]);
 
-        show("Medication added successfully.");
+        show(
+          "Medication added successfully."
+        );
       }
 
       resetForm();
@@ -247,12 +274,16 @@ function Medications({ show }: MedicationsProps) {
     }
   }
 
-  async function handleMarkTaken(medication: Medication) {
+  async function handleMarkTaken(
+    medication: Medication
+  ) {
     try {
       setError("");
 
       const updatedMedication =
-        await markMedicationTaken(medication._id);
+        await markMedicationTaken(
+          medication._id
+        );
 
       setMedications((current) =>
         current.map((item) =>
@@ -262,12 +293,19 @@ function Medications({ show }: MedicationsProps) {
         )
       );
 
-      setSelectedMedication(updatedMedication);
+      setSelectedMedication(
+        updatedMedication
+      );
 
-      show(`${medication.name} marked as taken.`);
+      show(
+        `${medication.name} marked as taken.`
+      );
     } catch (error) {
       console.error(error);
-      setError("Unable to mark medication as taken.");
+
+      setError(
+        "Unable to mark medication as taken."
+      );
     }
   }
 
@@ -278,7 +316,9 @@ function Medications({ show }: MedicationsProps) {
       setError("");
 
       const updatedMedication =
-        await cancelMedication(medication._id);
+        await cancelMedication(
+          medication._id
+        );
 
       setMedications((current) =>
         current.map((item) =>
@@ -288,12 +328,66 @@ function Medications({ show }: MedicationsProps) {
         )
       );
 
-      setSelectedMedication(updatedMedication);
+      setSelectedMedication(
+        updatedMedication
+      );
 
-      show(`${medication.name} cancelled.`);
+      show(
+        `${medication.name} cancelled.`
+      );
     } catch (error) {
       console.error(error);
-      setError("Unable to cancel medication.");
+
+      setError(
+        "Unable to cancel medication."
+      );
+    }
+  }
+
+  async function handleDeleteMedication(
+    medication: Medication
+  ) {
+    if (medication.active) {
+      setError(
+        "Active medications cannot be permanently deleted."
+      );
+
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Permanently delete ${medication.name}? This cannot be undone.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setError("");
+
+      await deleteMedication(
+        medication._id
+      );
+
+      setMedications((current) =>
+        current.filter(
+          (item) =>
+            item._id !== medication._id
+        )
+      );
+
+      setSelectedMedication(null);
+
+      show(
+        `${medication.name} deleted permanently.`
+      );
+    } catch (error) {
+      console.error(error);
+
+      setError(
+        "Unable to delete medication."
+      );
     }
   }
 
@@ -343,7 +437,6 @@ function Medications({ show }: MedicationsProps) {
           </div>
 
           <div className="medication-form-grid">
-
             {/* MEDICATION NAME */}
 
             <label className="medication-field">
@@ -377,7 +470,9 @@ function Medications({ show }: MedicationsProps) {
                     type="text"
                     value={doseValue}
                     onChange={(event) =>
-                      setDoseValue(event.target.value)
+                      setDoseValue(
+                        event.target.value
+                      )
                     }
                     placeholder="50000"
                     required
@@ -388,15 +483,22 @@ function Medications({ show }: MedicationsProps) {
                   <select
                     value={doseUnit}
                     onChange={(event) =>
-                      setDoseUnit(event.target.value)
+                      setDoseUnit(
+                        event.target.value
+                      )
                     }
                     aria-label="Dose unit"
                   >
-                    {DOSE_UNITS.map((unit) => (
-                      <option key={unit} value={unit}>
-                        {unit}
-                      </option>
-                    ))}
+                    {DOSE_UNITS.map(
+                      (unit) => (
+                        <option
+                          key={unit}
+                          value={unit}
+                        >
+                          {unit}
+                        </option>
+                      )
+                    )}
                   </select>
 
                   <ChevronDown size={17} />
@@ -415,22 +517,29 @@ function Medications({ show }: MedicationsProps) {
                 <select
                   value={instructions}
                   onChange={(event) =>
-                    setInstructions(event.target.value)
+                    setInstructions(
+                      event.target.value
+                    )
                   }
                   required
                 >
-                  <option value="" disabled>
+                  <option
+                    value=""
+                    disabled
+                  >
                     Select instructions
                   </option>
 
-                  {INSTRUCTION_OPTIONS.map((instruction) => (
-                    <option
-                      key={instruction}
-                      value={instruction}
-                    >
-                      {instruction}
-                    </option>
-                  ))}
+                  {INSTRUCTION_OPTIONS.map(
+                    (instruction) => (
+                      <option
+                        key={instruction}
+                        value={instruction}
+                      >
+                        {instruction}
+                      </option>
+                    )
+                  )}
                 </select>
 
                 <ChevronDown size={17} />
@@ -442,7 +551,9 @@ function Medications({ show }: MedicationsProps) {
 
                   <input
                     type="text"
-                    value={customInstructions}
+                    value={
+                      customInstructions
+                    }
                     onChange={(event) =>
                       setCustomInstructions(
                         event.target.value
@@ -468,7 +579,9 @@ function Medications({ show }: MedicationsProps) {
                   min="0"
                   value={remainingDays}
                   onChange={(event) =>
-                    setRemainingDays(event.target.value)
+                    setRemainingDays(
+                      event.target.value
+                    )
                   }
                   required
                 />
@@ -506,197 +619,249 @@ function Medications({ show }: MedicationsProps) {
 
       {/* MEDICATION DETAILS */}
 
-      {selectedMedication && !showForm && (
-        <div className="appointment-form medication-details">
-          <div className="medication-details-header">
-            <div className="medication-title-area">
-              <div className="medication-main-icon">
-                <Pill size={27} />
+      {selectedMedication &&
+        !showForm && (
+          <div className="appointment-form medication-details">
+            <div className="medication-details-header">
+              <div className="medication-title-area">
+                <div className="medication-main-icon">
+                  <Pill size={27} />
+                </div>
+
+                <div>
+                  <p className="medication-eyebrow">
+                    Medication
+                  </p>
+
+                  <h3>
+                    {
+                      selectedMedication.name
+                    }
+                  </h3>
+                </div>
               </div>
 
-              <div>
-                <p className="medication-eyebrow">
-                  Medication
-                </p>
+              <span
+                className={`medication-status ${
+                  selectedMedication.active
+                    ? "medication-status-active"
+                    : "medication-status-cancelled"
+                }`}
+              >
+                {selectedMedication.active
+                  ? "Active"
+                  : "Cancelled"}
+              </span>
+            </div>
 
-                <h3>{selectedMedication.name}</h3>
+            <div className="medication-info-grid">
+              <div className="medication-info-card">
+                <div className="medication-info-icon">
+                  <Pill size={20} />
+                </div>
+
+                <div>
+                  <span>
+                    Dose / Strength
+                  </span>
+
+                  <strong>
+                    {
+                      selectedMedication.dose
+                    }
+                  </strong>
+                </div>
+              </div>
+
+              <div className="medication-info-card">
+                <div className="medication-info-icon">
+                  <FileText size={20} />
+                </div>
+
+                <div>
+                  <span>
+                    Instructions
+                  </span>
+
+                  <strong>
+                    {
+                      selectedMedication.instructions
+                    }
+                  </strong>
+                </div>
+              </div>
+
+              <div className="medication-info-card">
+                <div className="medication-info-icon">
+                  <CalendarDays
+                    size={20}
+                  />
+                </div>
+
+                <div>
+                  <span>Remaining</span>
+
+                  <strong>
+                    {
+                      selectedMedication.remainingDays
+                    }{" "}
+                    days
+                  </strong>
+                </div>
+              </div>
+
+              <div className="medication-info-card">
+                <div className="medication-info-icon">
+                  <CheckCircle2
+                    size={20}
+                  />
+                </div>
+
+                <div>
+                  <span>Status</span>
+
+                  <strong>
+                    {selectedMedication.active
+                      ? "Active"
+                      : "Cancelled"}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="medication-info-card medication-info-card-wide">
+                <div className="medication-info-icon">
+                  <Clock3 size={20} />
+                </div>
+
+                <div>
+                  <span>Last taken</span>
+
+                  <strong>
+                    {selectedMedication.lastTakenAt
+                      ? new Date(
+                          selectedMedication.lastTakenAt
+                        ).toLocaleString()
+                      : "Not recorded yet"}
+                  </strong>
+                </div>
               </div>
             </div>
 
-            <span
-              className={`medication-status ${
-                selectedMedication.active
-                  ? "medication-status-active"
-                  : "medication-status-cancelled"
-              }`}
-            >
-              {selectedMedication.active
-                ? "Active"
-                : "Cancelled"}
-            </span>
-          </div>
+            <div className="medication-details-actions">
+              <button
+                type="button"
+                className="medication-btn medication-btn-light"
+                onClick={() =>
+                  setSelectedMedication(
+                    null
+                  )
+                }
+              >
+                <ArrowLeft size={17} />
+                Back
+              </button>
 
-          <div className="medication-info-grid">
-            <div className="medication-info-card">
-              <div className="medication-info-icon">
-                <Pill size={20} />
-              </div>
+              {selectedMedication.active ? (
+                <>
+                  <button
+                    type="button"
+                    className="medication-btn medication-btn-light"
+                    onClick={() =>
+                      handleEditMedication(
+                        selectedMedication
+                      )
+                    }
+                  >
+                    <Edit3 size={17} />
+                    Edit
+                  </button>
 
-              <div>
-                <span>Dose / Strength</span>
-                <strong>
-                  {selectedMedication.dose}
-                </strong>
-              </div>
-            </div>
+                  <button
+                    type="button"
+                    className="medication-btn medication-btn-primary"
+                    onClick={() =>
+                      handleMarkTaken(
+                        selectedMedication
+                      )
+                    }
+                  >
+                    <CheckCircle2
+                      size={17}
+                    />
+                    Mark taken
+                  </button>
 
-            <div className="medication-info-card">
-              <div className="medication-info-icon">
-                <FileText size={20} />
-              </div>
-
-              <div>
-                <span>Instructions</span>
-                <strong>
-                  {selectedMedication.instructions}
-                </strong>
-              </div>
-            </div>
-
-            <div className="medication-info-card">
-              <div className="medication-info-icon">
-                <CalendarDays size={20} />
-              </div>
-
-              <div>
-                <span>Remaining</span>
-                <strong>
-                  {selectedMedication.remainingDays} days
-                </strong>
-              </div>
-            </div>
-
-            <div className="medication-info-card">
-              <div className="medication-info-icon">
-                <CheckCircle2 size={20} />
-              </div>
-
-              <div>
-                <span>Status</span>
-                <strong>
-                  {selectedMedication.active
-                    ? "Active"
-                    : "Cancelled"}
-                </strong>
-              </div>
-            </div>
-
-            <div className="medication-info-card medication-info-card-wide">
-              <div className="medication-info-icon">
-                <Clock3 size={20} />
-              </div>
-
-              <div>
-                <span>Last taken</span>
-
-                <strong>
-                  {selectedMedication.lastTakenAt
-                    ? new Date(
-                        selectedMedication.lastTakenAt
-                      ).toLocaleString()
-                    : "Not recorded yet"}
-                </strong>
-              </div>
-            </div>
-          </div>
-
-          <div className="medication-details-actions">
-            <button
-              type="button"
-              className="medication-btn medication-btn-light"
-              onClick={() =>
-                setSelectedMedication(null)
-              }
-            >
-              <ArrowLeft size={17} />
-              Back
-            </button>
-
-            {selectedMedication.active && (
-              <>
-                <button
-                  type="button"
-                  className="medication-btn medication-btn-light"
-                  onClick={() =>
-                    handleEditMedication(
-                      selectedMedication
-                    )
-                  }
-                >
-                  <Edit3 size={17} />
-                  Edit
-                </button>
-
-                <button
-                  type="button"
-                  className="medication-btn medication-btn-primary"
-                  onClick={() =>
-                    handleMarkTaken(
-                      selectedMedication
-                    )
-                  }
-                >
-                  <CheckCircle2 size={17} />
-                  Mark taken
-                </button>
-
+                  <button
+                    type="button"
+                    className="medication-btn medication-btn-soft"
+                    onClick={() =>
+                      handleCancelMedication(
+                        selectedMedication
+                      )
+                    }
+                  >
+                    <XCircle size={17} />
+                    Cancel medication
+                  </button>
+                </>
+              ) : (
                 <button
                   type="button"
                   className="medication-btn medication-btn-soft"
                   onClick={() =>
-                    handleCancelMedication(
+                    handleDeleteMedication(
                       selectedMedication
                     )
                   }
                 >
-                  <XCircle size={17} />
-                  Cancel medication
+                  <Trash2 size={17} />
+                  Delete permanently
                 </button>
-              </>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* MEDICATION LIST */}
 
-      {!selectedMedication && !showForm && (
-        <>
-          <div className="item-list">
-            {medications.length ? (
-              medications.map((medication) => (
-                <MedicationCard
-                  key={medication._id}
-                  medication={medication}
-                  onSelect={handleSelectMedication}
-                />
-              ))
-            ) : (
-              <div className="empty">
-                No medications yet.
-              </div>
-            )}
-          </div>
+      {!selectedMedication &&
+        !showForm && (
+          <>
+            <div className="item-list">
+              {medications.length ? (
+                medications.map(
+                  (medication) => (
+                    <MedicationCard
+                      key={
+                        medication._id
+                      }
+                      medication={
+                        medication
+                      }
+                      onSelect={
+                        handleSelectMedication
+                      }
+                    />
+                  )
+                )
+              ) : (
+                <div className="empty">
+                  No medications yet.
+                </div>
+              )}
+            </div>
 
-          <button
-            type="button"
-            className="medication-add-button"
-            onClick={handleAddMedication}
-          >
-            Add medication
-          </button>
-        </>
-      )}
+            <button
+              type="button"
+              className="medication-add-button"
+              onClick={
+                handleAddMedication
+              }
+            >
+              Add medication
+            </button>
+          </>
+        )}
     </>
   );
 }

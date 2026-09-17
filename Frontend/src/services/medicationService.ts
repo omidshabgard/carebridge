@@ -121,3 +121,16 @@ export async function markMedicationTaken(
 
   return response.json();
 }
+
+export async function deleteMedication(
+  id: string
+): Promise<void> {
+  const response = await fetch(`${API_URL}/medications/${id}`, {
+    method: "DELETE",
+    headers: getHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete medication");
+  }
+}
