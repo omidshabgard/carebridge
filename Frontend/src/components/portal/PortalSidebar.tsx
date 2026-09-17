@@ -10,6 +10,7 @@ type PortalSidebarProps = {
   goHome: () => void;
   onClose: () => void;
   onSectionChange: (section: Section) => void;
+  unreadMessages: number;
 };
 
 export default function PortalSidebar({
@@ -18,10 +19,20 @@ export default function PortalSidebar({
   goHome,
   onClose,
   onSectionChange,
+  unreadMessages,
 }: PortalSidebarProps) {
   return (
-    <aside className={mobile ? "sidebar open" : "sidebar"}>
-      <button className="close" onClick={onClose}>
+    <aside
+      className={
+        mobile
+          ? "sidebar open"
+          : "sidebar"
+      }
+    >
+      <button
+        className="close"
+        onClick={onClose}
+      >
         <X />
       </button>
 
@@ -32,31 +43,66 @@ export default function PortalSidebar({
 
         <div>
           <b>Omid Shabgard</b>
-          <small>Patient ID • 08421</small>
+          <small>
+            Patient ID • 08421
+          </small>
         </div>
       </div>
 
       <nav>
-        {nav.map(({ name, icon: Icon, badge, color }) => (
-          <button
-            key={name}
-            className={active === name ? `active ${color}` : ""}
-            onClick={() => onSectionChange(name)}
-          >
-            <Icon />
-            <span>{name}</span>
+        {nav.map(
+          ({
+            name,
+            icon: Icon,
+            badge,
+            color,
+          }) => {
+            const displayBadge =
+              name === "Messages"
+                ? unreadMessages
+                : badge;
 
-            {badge && <i>{badge}</i>}
-          </button>
-        ))}
+            return (
+              <button
+                key={name}
+                className={
+                  active === name
+                    ? `active ${color}`
+                    : ""
+                }
+                onClick={() =>
+                  onSectionChange(name)
+                }
+              >
+                <Icon />
+
+                <span>{name}</span>
+
+                {Boolean(
+                  displayBadge
+                ) && (
+                  <i>
+                    {displayBadge}
+                  </i>
+                )}
+              </button>
+            );
+          }
+        )}
       </nav>
 
       <div className="secure">
         <ShieldCheck />
 
         <div>
-          <b>Your information is protected</b>
-          <small>Secure & encrypted</small>
+          <b>
+            Your information is
+            protected
+          </b>
+
+          <small>
+            Secure & encrypted
+          </small>
         </div>
       </div>
     </aside>

@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.js";
 import resourceRoutes from "./routes/resources.js";
 import appointmentRoutes from "./routes/appointments/index.js";
 import medicationRoutes from "./routes/medications/index.js";
+import messageRoutes from "./routes/messages/index.js";
 
 import {
   errorHandler,
@@ -57,6 +58,9 @@ app.use("/api/appointments", appointmentRoutes);
 
 // Medication routes
 app.use("/api/medications", medicationRoutes);
+
+// Message routes
+app.use("/api/messages", messageRoutes);
 
 // Other patient resources
 app.use("/api", resourceRoutes);
