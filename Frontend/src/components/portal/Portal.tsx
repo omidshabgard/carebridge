@@ -7,6 +7,7 @@ import {
 
 import "../../styles/portalSignout.css";
 import "../../styles/messages.css";
+import "../../styles/test-results.css";
 
 import {
   Bell,
@@ -40,6 +41,7 @@ import AppointmentDetails from "../appointments/AppointmentDetails";
 import AppointmentForm from "../appointments/AppointmentForm";
 import Medications from "../medications/Medications";
 import Messages from "../messages/Messages";
+import TestResults from "../test-results/TestResults";
 
 import PortalOverview from "./PortalOverview";
 import PortalSidebar from "./PortalSidebar";
@@ -238,7 +240,8 @@ export default function Portal({
   const items = useMemo(() => {
     if (
       active === "Overview" ||
-      active === "Messages"
+      active === "Messages" ||
+      active === "Test results"
     ) {
       return [];
     }
@@ -347,10 +350,13 @@ export default function Portal({
               placeholder={
                 active === "Messages"
                   ? "Search messages..."
-                  : "Search this section..."
+                  : active === "Test results"
+                    ? "Search test results..."
+                    : "Search this section..."
               }
               disabled={
-                active === "Messages"
+                active === "Messages" ||
+                active === "Test results"
               }
             />
           </label>
@@ -417,6 +423,9 @@ export default function Portal({
                 handleMessageActivity
               }
             />
+          ) : active ===
+              "Test results" ? (
+            <TestResults show={show} />
           ) : (
             <section className="section">
               <div className="section-head">
