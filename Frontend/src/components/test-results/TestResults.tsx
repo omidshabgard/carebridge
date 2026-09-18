@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArrowLeft,
   FlaskConical,
   MessageCircle,
   ShieldCheck,
@@ -28,6 +29,8 @@ import TestResultsEmptyState from "./TestResultsEmptyState";
 
 type TestResultsProps = {
   show?: (message: string) => void;
+  showBackToOverview?: boolean;
+  onBackToOverview?: () => void;
 };
 
 const emptySummary: TestResultSummaryData = {
@@ -40,6 +43,8 @@ const emptySummary: TestResultSummaryData = {
 
 function TestResults({
   show,
+  showBackToOverview = false,
+  onBackToOverview,
 }: TestResultsProps) {
   const [results, setResults] =
     useState<TestResult[]>([]);
@@ -213,6 +218,18 @@ function TestResults({
 
   return (
     <div className="test-results-page">
+      {showBackToOverview &&
+        onBackToOverview && (
+          <button
+            type="button"
+            className="test-results-overview-back"
+            onClick={onBackToOverview}
+          >
+            <ArrowLeft size={16} />
+            Back to Overview
+          </button>
+        )}
+
       {error && (
         <div
           className="test-results-error"

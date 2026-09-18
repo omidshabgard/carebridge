@@ -88,6 +88,13 @@ export default function Portal({
   const [query, setQuery] =
     useState("");
 
+  const [
+    testResultsEntry,
+    setTestResultsEntry,
+  ] = useState<"overview" | "sidebar">(
+    "sidebar"
+  );
+
   const [appointments, setAppointments] =
     useState<Appointment[]>([]);
 
@@ -318,9 +325,13 @@ export default function Portal({
         onClose={() =>
           setMobile(false)
         }
-        onSectionChange={
-          changeSection
-        }
+        onSectionChange={(section) => {
+          if (section === "Test results") {
+            setTestResultsEntry("sidebar");
+          }
+
+          changeSection(section);
+        }}
         unreadMessages={
           unreadMessages
         }
@@ -410,9 +421,11 @@ export default function Portal({
               medications={
                 medications
               }
-              onSectionChange={
-                changeSection
-              }
+              onSectionChange={changeSection}
+              onOpenTestResults={() => {
+                setTestResultsEntry("overview");
+                changeSection("Test results");
+              }}
               show={show}
             />
           ) : active ===
@@ -425,7 +438,16 @@ export default function Portal({
             />
           ) : active ===
               "Test results" ? (
-            <TestResults show={show} />
+            <TestResults
+              show={show}
+              showBackToOverview={
+                testResultsEntry === "overview"
+              }
+              onBackToOverview={() => {
+                setTestResultsEntry("sidebar");
+                changeSection("Overview");
+              }}
+            />
           ) : (
             <section className="section">
               <div className="section-head">

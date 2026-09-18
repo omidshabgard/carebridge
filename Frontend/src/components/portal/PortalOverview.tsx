@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import {
   Activity,
   CalendarDays,
   ChevronRight,
+  FlaskConical,
   HeartPulse,
   Hospital,
   Pill,
@@ -11,6 +13,10 @@ import {
 
 import type { Appointment } from "../../services/appointmentService";
 import type { Medication } from "../../services/medicationService";
+import {
+  getTestResults,
+  type TestResult,
+} from "../../services/testResultService";
 import type { Section } from "../../types";
 import Metric from "./Metric";
 
@@ -18,15 +24,67 @@ type PortalOverviewProps = {
   appointments: Appointment[];
   medications: Medication[];
   onSectionChange: (section: Section) => void;
+  onOpenTestResults: () => void;
   show: (message: string) => void;
 };
+
+function formatTestResultDate(date: string) {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatTestResultStatus(status: TestResult["status"]) {
+  if (status === "follow-up") {
+    return "Follow-up";
+  }
+
+  return status.charAt(0).toUpperCase() + status.slice(1);
+}
 
 export default function PortalOverview({
   appointments,
   medications,
   onSectionChange,
+  onOpenTestResults,
   show,
 }: PortalOverviewProps) {
+  const [latestTestResult, setLatestTestResult] =
+    useState<TestResult | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadLatestTestResult() {
+      try {
+        const results = await getTestResults();
+
+        if (!active) {
+          return;
+        }
+
+        const latest = [...results].sort(
+          (a, b) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime(),
+        )[0];
+
+        setLatestTestResult(latest ?? null);
+      } catch {
+        if (active) {
+          setLatestTestResult(null);
+        }
+      }
+    }
+
+    void loadLatestTestResult();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <>
       <section className="hero">
@@ -237,6 +295,38 @@ export default function PortalOverview({
             ))}
         </article>
       </section>
+
+      {latestTestResult && (
+        <section className="overview-test-result">
+          <div className="overview-test-result__icon">
+            <FlaskConical />
+          </div>
+
+          <div className="overview-test-result__content">
+            <small>LATEST TEST RESULT</small>
+
+            <div className="overview-test-result__info">
+              <strong>{latestTestResult.name}</strong>
+
+              <span>
+                {formatTestResultDate(latestTestResult.date)} •{" "}
+                {latestTestResult.facility}
+              </span>
+            </div>
+          </div>
+
+          <span
+            className={`overview-test-result__status overview-test-result__status--${latestTestResult.status}`}
+          >
+            {formatTestResultStatus(latestTestResult.status)}
+          </span>
+
+          <button onClick={onOpenTestResults}>
+            View all results
+            <ChevronRight />
+          </button>
+        </section>
+      )}
     </>
   );
 }
