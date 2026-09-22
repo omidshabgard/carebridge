@@ -8,6 +8,7 @@ import resourceRoutes from "./routes/resources.js";
 import appointmentRoutes from "./routes/appointments/index.js";
 import medicationRoutes from "./routes/medications/index.js";
 import messageRoutes from "./routes/messages/index.js";
+import healthRecordRoutes from "./routes/health-records/index.js";
 
 import {
   errorHandler,
@@ -23,7 +24,8 @@ app.use(helmet());
 app.use(
   cors({
     origin: (
-      process.env.CLIENT_ORIGIN ?? "http://localhost:3000"
+      process.env.CLIENT_ORIGIN ??
+      "http://localhost:3000"
     ).split(","),
     credentials: true,
   })
@@ -54,13 +56,28 @@ app.get("/api/health", (_req, res) => {
 });
 
 // Appointment routes
-app.use("/api/appointments", appointmentRoutes);
+app.use(
+  "/api/appointments",
+  appointmentRoutes
+);
 
 // Medication routes
-app.use("/api/medications", medicationRoutes);
+app.use(
+  "/api/medications",
+  medicationRoutes
+);
 
 // Message routes
-app.use("/api/messages", messageRoutes);
+app.use(
+  "/api/messages",
+  messageRoutes
+);
+
+// Health record routes
+app.use(
+  "/api/health-records",
+  healthRecordRoutes
+);
 
 // Other patient resources
 app.use("/api", resourceRoutes);

@@ -3,6 +3,7 @@ import {
   Activity,
   CalendarDays,
   ChevronRight,
+  FileHeart,
   FlaskConical,
   HeartPulse,
   Hospital,
@@ -13,6 +14,10 @@ import {
 
 import type { Appointment } from "../../services/appointmentService";
 import type { Medication } from "../../services/medicationService";
+import {
+  getHealthRecords,
+  type HealthRecord,
+} from "../../services/healthRecordService";
 import {
   getTestResults,
   type TestResult,
@@ -44,6 +49,14 @@ function formatTestResultStatus(status: TestResult["status"]) {
   return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
+function formatHealthRecordDate(date: string) {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export default function PortalOverview({
   appointments,
   medications,
@@ -53,6 +66,12 @@ export default function PortalOverview({
 }: PortalOverviewProps) {
   const [latestTestResult, setLatestTestResult] =
     useState<TestResult | null>(null);
+
+  const [latestHealthRecord, setLatestHealthRecord] =
+    useState<HealthRecord | null>(null);
+
+  const [healthRecordCount, setHealthRecordCount] =
+    useState(0);
 
   useEffect(() => {
     let active = true;
@@ -67,7 +86,8 @@ export default function PortalOverview({
 
         const latest = [...results].sort(
           (a, b) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime(),
+            new Date(b.date).getTime() -
+            new Date(a.date).getTime(),
         )[0];
 
         setLatestTestResult(latest ?? null);
@@ -79,6 +99,40 @@ export default function PortalOverview({
     }
 
     void loadLatestTestResult();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadHealthRecords() {
+      try {
+        const records = await getHealthRecords();
+
+        if (!active) {
+          return;
+        }
+
+        const sorted = [...records].sort(
+          (a, b) =>
+            new Date(b.recordDate).getTime() -
+            new Date(a.recordDate).getTime(),
+        );
+
+        setHealthRecordCount(sorted.length);
+        setLatestHealthRecord(sorted[0] ?? null);
+      } catch {
+        if (active) {
+          setHealthRecordCount(0);
+          setLatestHealthRecord(null);
+        }
+      }
+    }
+
+    void loadHealthRecords();
 
     return () => {
       active = false;
@@ -295,6 +349,38 @@ export default function PortalOverview({
             ))}
         </article>
       </section>
+
+      {latestHealthRecord && (
+        <section className="overview-health-record">
+          <div className="overview-health-record__icon">
+            <FileHeart />
+          </div>
+
+          <div className="overview-health-record__content">
+            <small>HEALTH RECORDS</small>
+
+            <div className="overview-health-record__info">
+              <strong>{latestHealthRecord.title}</strong>
+
+              <span>
+                {formatHealthRecordDate(latestHealthRecord.recordDate)}
+                {" • "}
+                {latestHealthRecord.providerName}
+              </span>
+            </div>
+          </div>
+
+          <span className="overview-health-record__count">
+            {healthRecordCount}{" "}
+            {healthRecordCount === 1 ? "record" : "records"}
+          </span>
+
+          <button onClick={() => onSectionChange("Health records")}>
+            View health records
+            <ChevronRight />
+          </button>
+        </section>
+      )}
 
       {latestTestResult && (
         <section className="overview-test-result">
