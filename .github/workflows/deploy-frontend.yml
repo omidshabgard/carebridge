@@ -37,6 +37,8 @@ jobs:
 
       - name: Build frontend
         working-directory: Frontend
+        env:
+          VITE_API_URL: https://carebridge-api-omid-euhdfjg5ecaebqas.westus3-01.azurewebsites.net/api
         run: npm run build
 
       - name: Deploy frontend to Cloud Run
