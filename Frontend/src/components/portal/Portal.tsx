@@ -4,6 +4,11 @@ import "../../styles/health-records.css";
 import "../../styles/portalSignout.css";
 import "../../styles/messages.css";
 import "../../styles/test-results.css";
+import "../../styles/billing.css";
+import "../../styles/insurance.css";
+import "../../styles/care-team.css";
+import "../../styles/documents.css";
+import "../../styles/settings.css";
 
 import {
   Bell,
@@ -37,6 +42,11 @@ import Medications from "../medications/Medications";
 import Messages from "../messages/Messages";
 import TestResults from "../test-results/TestResults";
 import HealthRecords from "../health-records/HealthRecords";
+import Billing from "../billing/Billing";
+import Insurance from "../insurance/Insurance";
+import CareTeam from "../care-team/CareTeam";
+import Documents from "../documents/Documents";
+import Settings from "../settings/Settings";
 
 import PortalOverview from "./PortalOverview";
 import PortalSidebar from "./PortalSidebar";
@@ -324,6 +334,16 @@ export default function Portal({ goHome }: PortalProps) {
             />
           ) : active === "Health records" ? (
             <HealthRecords show={show} />
+          ) : active === "Billing" ? (
+            <Billing />
+          ) : active === "Insurance" ? (
+            <Insurance />
+          ) : active === "Care team" ? (
+            <CareTeam />
+          ) : active === "Documents" ? (
+            <Documents />
+          ) : active === "Settings" ? (
+            <Settings />
           ) : (
             <section className="section">
               <div className="section-head">
